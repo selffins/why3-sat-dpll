@@ -111,7 +111,7 @@ predicate sat_with (rho : valuation) (cnf : cnf) =
 (* formula is unsatisfied *)
 predicate unsat (cnf : cnf) =
   forall rho:valuation. valid_valuation rho cnf -> not (sat_with rho cnf)
-
+    
 (******************************************************************************)
 (* Partial valuations                                                         *)
 (******************************************************************************)

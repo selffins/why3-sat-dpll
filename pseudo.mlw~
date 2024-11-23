@@ -1,8 +1,0 @@
-
-let sat cnf =
-    (* instantiate pval, old_pval, diff, old_diff *)
-
-    while i < nvars:
-        old_diff = diff
-        old_pval = pval
-    
