@@ -1,0 +1,29 @@
+
+let sat cnf =
+    (* instantiate pval, old_pval, diff, old_diff, prev_sign *)
+
+    while i < nvars (* i being num of assigned variables instead? *)
+    do
+        (*  set olds
+            old_diff = diff
+            old_pval = pval
+        *)
+    try
+        let lit = {var = i,  sign = true} in  ?
+        let (b, diff') = set_value lit pval cnf in
+        if b   (* conflict *)
+        then
+                (* old_diff = ???, old_pval = ??? *)
+                backtrack diff' old_pval pval; i = i - 1 (* or i = nvars - numof NONE pval *)
+                (* now what? *)
+        else
+                i = i + 1 (* or i = nvars - numof NONE pval *)
+                
+                
+            
+    
+    with
+
+    end
+    
+    

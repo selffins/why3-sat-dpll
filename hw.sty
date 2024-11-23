@@ -1,0 +1,36 @@
+% Generic homework style
+% Overrides some items from lecnotes.sty
+
+\usepackage{lecnotes}
+\usepackage{framed}
+\newenvironment{solution}{\framed}{\endframed}
+
+\newtheorem{task}{Task}
+
+% based on fullpage.sty 
+\newlength{\hwmargin}
+\setlength{\hwmargin}{1in}
+
+\setlength{\textwidth}{\paperwidth}
+\addtolength{\textwidth}{-2\hwmargin}
+\setlength{\textheight}{\paperheight}
+\addtolength{\textheight}{-2\headheight}
+\addtolength{\textheight}{-2\hwmargin}
+\setlength{\oddsidemargin}{\hwmargin}
+\addtolength{\oddsidemargin}{-1in}
+\setlength{\topmargin}{\hwmargin}
+\addtolength{\topmargin}{-1in}
+
+\setlength{\headwidth}{\textwidth}
+
+\title{Mini-Project \hwnum \\ \hwtitle}
+\date{Due \hwdue \\ \hwpoints}
+
+\lhead[\fancyplain{}{\bfseries MP\hwnum.\thepage}]%
+      {\fancyplain{}{\bfseries\hwtitle}}
+\chead[]{}
+\rhead[\fancyplain{}{\bfseries\hwtitle}]%
+      {\fancyplain{}{\bfseries MP\hwnum.\thepage}}
+\lfoot[{\small\scshape Mini-Project \hwnum}]{{\small\scshape Mini-Project \hwnum}}
+\cfoot[]{}
+\rfoot[{\small\scshape \hwpoints}]{{\small\scshape \hwpoints}}

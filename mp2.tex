@@ -1,0 +1,514 @@
+\documentclass[11pt]{article}
+
+\newcommand{\lecid}{15-414}
+\newcommand{\leccourse}{Bug Catching: Automated Program Verification}
+\newcommand{\lecturer}{}
+\newcommand{\lecurl}{http://www.cs.cmu.edu/~15414/}
+
+\newcommand{\hwnum}{2}
+\newcommand{\hwtitle}{Decision Procedures}
+\newcommand{\hwdue}{23:59pm, Friday, April 5, 2024 (checkpoint) \\
+                    23:59pm, Friday, April 19, 2024 (final)}
+\newcommand{\hwpoints}{150 pts}
+
+\usepackage{hw}
+\usepackage{stmaryrd}
+\input{fp-macros}
+\lstset{style=why}
+
+\begin{document}
+
+\maketitle
+
+You may, but are not required to, do this assignment with a partner.
+
+The mini-projects have two due dates:
+\begin{itemize}
+\item Checkpoint at 23:59pm, Fri Apr 5, 2024 (70 pts)
+\item Final projects at 23:59pm, Fri Apr 19 2024 (80 pts)
+\end{itemize}
+
+No late days may be used on the checkpoint portion of the project.  
+You may recover up to 40 of the points you lost
+at the checkpoint if you revise the first part with your final
+submission. For the checkpoint, having a fully verified version may be 
+challenging but you can recover the points regarding verification. 
+However, your implementation should be working and we provide a set of 
+CNF formulas for you to test your `\verb|sat|` function.
+
+The mini-project must be submitted electronically on Gradescope.
+Please carefully read the policies on collaboration and credit on the
+course web pages at \url{\lecurl/assignments.html}.
+
+If you are working with a partner, only one of the two of you needs to
+submit to each Gradescope assignment.  Once you have uploaded a
+submission, you should select the option to add group members on the
+bottom of the screen, and add your partner to your submission.  Your
+partner should then make sure that they, too, can see the submission.
+
+\begin{quote}
+  As before, we give the advice that: {\color{red}\textbf{Elegance is not
+      optional!}}  For writing verified code, this applies to both:
+  the specification and the implementation.
+\end{quote}
+
+\clearpage
+\subsection*{The Code}
+
+In each problem, we provide some suggested module outlines, but your
+submitted modules may be different.  For example, where we say
+`\verb|let|' it may actually be `\verb|let rec|', or
+`\verb|predicate|', etc. However, you \textbf{cannot make any of the main 
+functions for each task pure} (i.e., you cannot use `\verb|function|`). 
+You may modify the order of the
+functions or provide auxiliary types and functions.  You may also
+change the type definitions or types of the function, but in this case,
+you should justify the change in your writeup. 
+%
+We recommended your functions to raise exceptions for convenience since this would 
+make it easier to stop once the condition was met. However, depending on your implementation 
+you may want to return a value instead of raising an exception. We leave this choice up to you.
+%
+\textbf{Note that you should not write axioms for this assignment.}
+
+
+
+\subsection*{The Writeup (20 pts)}
+
+The writeup should consist of the following sections:
+\begin{enumerate}
+\item {\bf{Executive Summary.}}  Which problem did you solve?  Did you manage
+  to write and verify all functions?  If not, where did the code or
+  verification fall short?  Which were the key decisions you had to
+  make?  What ended up being the most difficult and the easiest parts?
+  What did you find were the best provers for your problem?  What did
+  you learn from the effort?
+\item {\bf{Code Walk.}}  Explain the relevant or nontrivial parts of the
+  specification or code.  Point out issues or alternatives, taken or
+  abandoned.  Quoting some code is helpful, but avoid ``core dumps.''
+  Basically, put yourself into the shoes of a professor or TA wanting
+  to understand your submission (and, incidentally, grade it).
+\item {\bf{Recommendations.}}  What would you change in the assignment?
+\end{enumerate}
+Depending on how much code is quoted, we expect the writeup to consist of about
+3-5 pages in the lecture notes style.
+
+
+\subsection*{What To Hand In}
+
+You should hand in the following files on Gradescope:
+\begin{itemize}
+\item Submit the file \texttt{mp2.zip} to MP2 Checkpoint
+  (Code) for the checkpoint and to MP2 Final (Code) for the
+  final handin.  We will be looking for files \texttt{sat.mlw}.  
+  Use \texttt{make handin} to create the handin file.
+\item Submit a PDF containing your final writeup to
+  MP2 Final (Written).  There is no checkpoint for the
+  written portion of the assingment.  You may use the file
+  \texttt{mp2-sol.tex} as a template and submit \texttt{mp2-sol.pdf}. 
+  Use \texttt{make sol} to create the writeup file.
+\end{itemize}
+
+\begin{quote}\bf
+  Make sure your session directories and your PDF solution files are
+  up to date before you create the handin file.
+\end{quote}
+
+\subsection*{Using LaTeX}
+
+We prefer the writeup to be typeset in LaTeX,
+but as long as you hand in a readable PDF with your solutions it is
+not a requirement.  We package the assignment source
+\texttt{mp2.tex} and a solution template \texttt{mp2-sol.tex} in
+the handout to get you started on this.
+
+\clearpage
+\section{SAT Solver}
+
+A \emph{SAT solver} uses a decision procedure to establish the satisfiability of a propositional formula. The goal of this project is to implement a SAT solver based on DPLL and unit propagation that takes a formula in conjunctive normal form as an input and decides whether or not it is satisfiable by enumerating every possible valuation of its variables. 
+
+
+\paragraph{A reminder on DPLL and unit propagation.}
+
+We define a \emph{partial valuation} as a {partial} function from variable identifiers
+to booleans. A variable that is not mapped to a value is said to be \emph{unassigned}.
+Besides, a literal $x_i$ or $\neg x_i$ is said to be {unassigned} if and only if $x_i$ is unassigned. Given a partial valuation, a clause is said to be
+
+\begin{itemize}
+\setlength\itemsep{0.1em}
+\item \emph{satisfied} if one or more of its literals are satisfied
+\item \emph{conflicting} if all its literals are assigned but not satisfied
+\item \emph{unit} if it is not satisfied and all but one of its literals are assigned
+\item \emph{unresolved} otherwise.
+\end{itemize}
+
+\noindent The {DPLL} algorithm enhances a naive backtracking search algorithm
+by implementing an optimization called \emph{unit propagation}: if a clause
+becomes unit during the search process, it can only be satisfied by making its unique
+unassigned literal true and so no branching is necessary. In practice, this rule
+often applies in cascade, which can reduce the search space greatly. An example run
+of the {DPLL} algorithm is shown Figure~\ref{fig:sat-ex}.
+
+\bigskip
+
+\newcommand{\true}[0]{\texttt{true}}
+\newcommand{\false}[0]{\texttt{false}}
+
+
+\begin{figure}[h!]
+\hrulefill
+\small
+\[F \,=\, 
+  \overbrace{(x_2 \vee x_3)}^{C_0} \,\wedge\, 
+  \overbrace{(\neg x_1 \vee \neg x_3)}^{C_1} \,\wedge\, 
+    \overbrace{(\neg x_1 \vee \neg x_2 \vee x_3)}^{C_2} \,\wedge\,
+    \overbrace{(x_0 \vee x_1 \vee \neg x_3)}^{C_3}  \,\wedge\,
+    \overbrace{(\neg x_0 \vee x_1 \vee x_3)}^{C_4}
+\]
+
+
+\begin{center}
+\begin{tabular}{ll}
+
+\textbf{Step} & \textbf{Partial valuation} \\
+
+
+Start with an empty partial valuation. & $\{\}$ \\
+
+Decide $x_0$. & $\{x_0 \mapsto \true \}$ \\
+
+\quad Decide $x_1$. & $\{x_0 \mapsto \true,\, x_1 \mapsto \true \}$ \\
+
+\quad \quad Propagate $\neg x_3$ from unit clause $C_1$. & 
+$\{x_0 \mapsto \true,\, x_1 \mapsto \true,\, x_3 \mapsto \false \}$ \\
+
+\quad \quad Propagate $x_2$ from $C_0$. & 
+$\{x_0 \mapsto \true,\, x_1 \mapsto \true,\, x_3 \mapsto \false,\, x_2 \mapsto \true \}$ \\
+
+\quad \quad Clause $C_2$ is conflicting. Backtracking. & $\{x_0 \mapsto \true \}$ \\
+
+\quad Decide $\neg x_1$. & $\{x_0 \mapsto \true,\, x_1 \mapsto \false \}$ \\
+
+\quad \quad Propagate $x_3$ from $C_4$. & 
+$\{x_0 \mapsto \true,\, x_1 \mapsto \false,\, x_3 \mapsto \true \}$ \\
+\quad \quad Every clause is satisfied: $F$ is satisfiable. & 
+$\{x_0 \mapsto \true,\, x_1 \mapsto \false,\, x_3 \mapsto \true,\, x_2 \mapsto * \}$\\
+
+\end{tabular}
+\end{center}
+\caption{Unit propagation in action}\label{fig:sat-ex}
+\hrulefill
+\end{figure}
+
+\medskip
+
+More details about the DPLL algorithm and unit propagation are available in \href{https://www.cs.cmu.edu/~15414/lectures/16-satdpll.pdf}{Lecture 16} notes.
+
+\subsection{SAT solver with partial valuations (Checkpoint: 70 pts)}
+
+In \href{https://www.cs.cmu.edu/~15414/assignments/asst5.pdf}{Assignment 5}, you specified and implemented some simple operations that can be performed over formulas in CNF. In that assignment you considered complete valuations, however, in practice a SAT solver uses partial valuations. In this project, we will start by considering the same types as before. You may reuse any code from Assignment 5. All code that you write for the checkpoint should be in the module \texttt{Sat}.
+
+\begin{lstlisting}
+  type var = int
+  type lit = { var : var ; sign : bool }
+  type clause = list lit
+  type cnf = { clauses : array clause ; nvars : int }
+  type valuation = array bool
+\end{lstlisting}
+
+To make it easier for this assignment, we provide in the code template the data structure invariants for the type \texttt{cnf} as well as basic predicates (\texttt{valid\_valuation}, \texttt{clause\_sat\_with}, \texttt{sat\_with}, and \texttt{unsat}). We recommend using these predicates for your specifications.
+
+\paragraph{Partial valuations.} A variable in a partial valuation can take values \emph{True} or \emph{False} if it is assigned a value, or \emph{None} if is unassigned. A complete valuations relates  a with partial valuation as follows. A partial valuation is said to be \emph{compatible} with a valuation $\rho$ if both agree on every variable which is assigned by $p$. In particular, an empty partial valuation is compatible with any valuation.
+
+\begin{lstlisting}
+type pval = array (option bool)
+
+predicate compatible (pval : pval) (rho : valuation) =
+  forall i:int, b:bool. 0 <= i < length pval ->
+  pval[i] = Some b -> rho[i] = b
+\end{lstlisting}
+
+\begin{task}[10 pts]
+A partial valuation that satisfies a CNF formula can be extended to a complete valuation by assigning the unassigned variables to any truth value. Implement, specify and verify a function \verb|extract_sat_valuation| that given a partial valuation \texttt{pval} that satisfies the formula \texttt{cnf} returns a complete valuation that also satisfies the formula \texttt{cnf}.
+
+\begin{lstlisting}
+let extract_sat_valuation (pval : pval) (ghost cnf : cnf) : valuation
+\end{lstlisting}
+\end{task}
+
+\begin{task}[10 pts] Implement, specify and verify a function \verb|partial_eval_clause| 
+that takes a partial valuation $p$ along with a clause $C$ as
+its arguments and returns:
+\begin{itemize}
+\setlength\itemsep{0em}
+\item $[\texttt{Satisfied}]$ if and only if $p$ satisfies $C$
+\item $[\texttt{Conflicting}]$ if and only if $p$ and $C$ are conflicting
+\item $[\texttt{Unresolved}$] in every other case. 
+\end{itemize}
+
+This corresponds to the following type and function definition:
+\begin{lstlisting}
+type clause_status =
+  | Satisfied
+  | Conflicting
+  | Unresolved
+
+let rec partial_eval_clause (p : pval) (c : clause) : clause_status
+\end{lstlisting}
+
+Note that your specification only needs to prove implications and not equivalences. For instance, you only need to prove that if the result is something then 
+that implies something else. For instance:
+
+\begin{lstlisting}
+ensures  { result = Satisfied -> ... }
+\end{lstlisting}
+
+To make writing the specification easier for the \texttt{Unresolved} case, you can write a weaker specification that does not need to be as precise as the definition. In particular, you can just ensure that when you return \texttt{Unresolved} the clause contains an unassigned literal. Note that this simplification could lead to an implementation that would mark a clause as \texttt{Unresolved} when it is already \texttt{Satisfied}. However, this would not be problematic for the correctness of \texttt{sat} since eventually the clause would be marked as \texttt{Satisfied}. This happens in practice since SAT solvers do not keep track of the status of a clause and only track if a clause is conflicting (requires backtracking) or unit (requires propagation).
+\end{task}
+
+
+\begin{task}[10 pts] Implement, specify and verify a function \verb|partial_eval_cnf| 
+that takes a partial valuation $p$ along with a CNF formula $cnf$ as
+its arguments and returns:
+\begin{itemize}
+\setlength\itemsep{0em}
+\item $[\texttt{Sat}]$ if and only if $p$ satisfies every clause of $cnf$.
+In this case, $cnf$ is true for every valuation that is compatible
+with $p$ and the search can stop.
+\item $[\texttt{Conflict}]$ if $p$ is conflicting with at least one clause of $cnf$. In this case, $cnf$ is false for every valuation that is compatible with $p$ and backtracking is needed.
+\item $[\texttt{Other}]$ in every other case.
+\end{itemize}
+
+Your \texttt{partial\_eval\_cnf} function should raise an exception \texttt{Conflict\_found} when a conflict is found. You do not need to find all conflicts and can return an exception in the first conflict you find.
+%
+This corresponds to the following type and function definition:
+\begin{lstlisting}
+exception Conflict_found
+
+type cnf_status =
+  | Sat
+  | Conflict
+  | Other
+
+let partial_eval_cnf (p : pval) (cnf : cnf) : cnf_status
+\end{lstlisting}
+
+Similarly to Task 2, your specification only needs to prove implications and not equivalences.
+\end{task}
+
+\begin{task}[5 pts] Implement, specify and verify a \texttt{backtrack} function. Recall that in the DPLL algorithm, when a conflict arises during search, one has to
+backtrack before the last decision point. A naive way to do so would be to create a
+full copy of the current partial valuation every time a choice is made but this
+would be terribly inefficient. A better alternative is to maintain a list of every
+variable that has been assigned since the last decision point and to use this list as a reference for backtracking.
+
+Let $p$ and $p'$ two partial valuations and $l$ a list of variables. We say that
+$l$ is a \emph{delta} from $p$ to $p'$ if $p$ and $p'$ agree outside of $l$ and
+the variables of $l$ are unassigned in $p$. This can be formalized as follows:
+
+\begin{lstlisting}
+predicate delta (diff : list var) (pval pval' : pval) =
+  (length pval = length pval') /\
+  (forall v:var. mem v diff -> 0<=v< length pval /\ not (assigned pval v)) /\
+  (forall v:var. 0<=v< length pval -> not (mem v diff) -> pval[v] = pval'[v])
+\end{lstlisting}
+
+Then, we can define a function \verb|backtrack| that restores an older version
+of a partial valuation given a delta from this older version to the current one:
+
+\begin{lstlisting}
+let rec backtrack (diff : list var) (pval : pval) (ghost old_pval : pval)
+\end{lstlisting}
+
+Note that \verb|old_pval| is a \emph{ghost argument}, which means that it will be
+eliminated during compilation. Therefore, it cannot be used in the body of \texttt{backtrack} but only in its specification. However, as opposed to 
+\verb|diff| and \verb|pval|, it can be instantiated with ghost code. 
+
+\end{task}
+
+\begin{task}[5 pts] Implement, specify, and verify a function \verb|set_value| that takes as its arguments an unassigned literal $l$ and the current partial valuation $p$. It updates $p$ by setting literal $l$ to true. Besides:
+
+\begin{itemize}
+\item It raises a \verb|Sat_found| exception in case the CNF becomes satisfied.
+\item It returns a tuple whose first component is a boolean that is \true{} if and only if a conflict was reached and whose second component is the delta of $p$ (in this case since only one variable is assigned the delta will correspond to the variable \texttt{l.var}).
+\end{itemize}
+
+\begin{lstlisting}
+exception Sat_found
+
+let set_value (l : lit) (pval : pval) (cnf : cnf) : (bool, list var)
+\end{lstlisting}
+
+Note that \texttt{set\_value} returns a \texttt{list var} but this list will only contain one element. However, we suggest this signature so that it will be easier to change your code from the checkpoint to the final submission. Similarly to the other tasks, you only need to prove implications in your contracts.
+\end{task}
+
+\begin{task}[30] Implement, specify, and verify a function \verb|sat| that uses partial valuations and puts all the previous pieces together to prove the satisfiability of a propositional formula.  In particular, this function should satisfy the following contract.
+
+\begin{lstlisting}
+let sat (cnf : cnf) : option valuation =
+  ensures  { forall rho:valuation. result = Some rho -> sat_with rho cnf }
+  ensures  { result = None -> unsat cnf }
+\end{lstlisting}
+\end{task}
+
+\textbf{Hints:} Since this project is harder to fully verify, we provide here some hints that may be helpful for you.
+
+When writing your specification about a formula being satisfiable, you will need to relate a partial valuation with a formula being satisfied. The following predicate (or something similar) may be useful for your tasks:
+
+\begin{lstlisting}
+predicate sat_with_pval (pval : pval) (cnf : cnf) =
+  forall rho:valuation. compatible pval rho -> sat_with rho cnf
+\end{lstlisting}
+
+When writing the specifications for the \texttt{partial\_eval\_cnf} function we \textbf{do not recommend} to take the definitions and transform them directly into predicates as below.
+
+\begin{lstlisting}
+predicate cnf_satisfied (pval : pval) (cnf : cnf) = 
+  forall i. 0 <= i < length cnf.clauses -> clause_satisfied pval cnf.clauses[i] 
+
+predicate cnf_conflicting (pval : pval) (cnf : cnf) = 
+exists i. 0 <= i < length cnf.clauses /\ clause_conflicting pval cnf.clauses[i]}
+...
+\end{lstlisting}
+
+Instead, you should write these predicates using the \texttt{sat\_with} predicate (or similar). Note that the specification of \texttt{sat} relies on the predicate \texttt{sat\_with}. If you write your other definitions without using this predicate then you would need to write many auxiliary lemmas to help the provers understand the connection between \texttt{sat\_with} and those definitions.
+
+
+\subsection{SAT solver with unit propagation (Final Submission, 60 pts)}
+
+We now extend the previous implementation of the SAT solver with unit propagation. This will allow your solver to be more efficient since it can \emph{backtrack} earlier because it may find conflicts earlier when propagating unit literals. All code that you write from this point forward should be in the module \texttt{UnitSat}. You can copy the previous functions before doing the modifications that are required below.
+
+\begin{task}[5 pts]
+To perform unit propagation, we need to capture the notion of \emph{unit clause}. Modify and verify the function \verb|partial_eval_clause| when considering an extension of the type \texttt{clause\_status} that includes \texttt{Unit lit}, i.e. that returns:
+\begin{itemize}
+\item $[\texttt{Unit}\ l]$ if $c$ is a unit clause with unassigned literal $l$ (for partial valuation $p$)
+\end{itemize}
+
+The updated type of \texttt{clause\_status} is:
+\begin{lstlisting}
+type clause_status =
+  | Satisfied
+  | Conflicting
+  | Unit lit
+  | Unresolved
+\end{lstlisting}
+\end{task}
+
+\begin{task}[5 pts]
+Modify and verify the function \verb|partial_eval_cnf| to consider unit clauses, i.e.:
+\begin{itemize}
+\item $[\texttt{Unit\_clause}\ l]$ only if $cnf$ admits a unit clause whose unassigned literal is $l$. If $cnf$ admits more than one unit clause, which one is featured in the argument of $\texttt{Unit\_clause}$ is unspecified.
+\end{itemize}
+
+Your \texttt{partial\_eval\_cnf} function should raise an exception \texttt{Unit\_found} when a unit clause is found. You do not need to find all unit clauses and can return an exception in the first unit clause you find (even though there may be conflicting clauses in the formula).
+%
+The updated type for \verb|cnf_status| is:
+\begin{lstlisting}
+exception Conflict_found
+exception Unit_found lit
+
+type cnf_status =
+  | Sat
+  | Conflict
+  | Unit_clause lit
+  | Other
+\end{lstlisting}
+
+The Other case is not very interesting since it will not affect the correctness of the algorithm as long as you ensure that when the valuation is complete the result can only be either \texttt{Sat} or \texttt{Conflict}. Therefore, we allow you to weaken the specification of \texttt{Other} and write whatever you think it is suitable.
+\end{task}
+
+\begin{task}[40 pts]
+Specify, implement and verify a function \verb|set_and_propagate| with the 
+the following signature:
+
+\begin{lstlisting}
+let rec set_and_propagate (l : lit) (pval : pval) (cnf : cnf) : 
+                          (bool, list var)
+\end{lstlisting}
+
+This function takes as its arguments an unassigned literal $l$ and the current partial
+valuation $p$. It updates $p$ by
+setting literal $l$ to true and then recursively performing unit propagation until a 
+conflict is reached or no unit clause remains.
+%
+Even though your implementation must run this procedure until fix point, you do not need to write a 
+specification that guarantees this fix point, i.e. your specification does not need to prove that 
+when you terminate there are no more unit clauses.
+%
+Besides:
+
+\begin{itemize}
+\item It raises a \verb|Sat_found| exception in case the \textsc{cnf} becomes satisfied.
+\item It returns a tuple whose first component is a boolean that is \true{} if and only if a conflict was reached and whose second component is the delta of $p$ (the list of every variable that was assigned during the call to \verb|set_and_propagate|).
+\end{itemize}
+
+\noindent To go back to the example of Figure~\ref{fig:sat-ex}, calling 
+$\texttt{set\_and\_propagate}$ for literal $x_1$ and with $\texttt{pval} = \{ x_0 \mapsto \true \}$
+updates \verb|pval| to $\{x_0 \mapsto \true,\, x_1 \mapsto \true,\, x_3 \mapsto \false,\, x_2 \mapsto \true \}$ and returns the tuple $(\true,\, [2, 3, 1])$.
+
+\paragraph{Proving termination.} In the template, you will find a lemma \texttt{numof\_decreases} that may be useful for proving termination of the unit propagation procedure. This lemma states that when you modify an array by updating a single cell from a value $v$ to a {different} value, the number of occurrences of $v$ in this array decreases by one. 
+%
+To count the number of occurrences of $v$ in an array, you can use the provided function \texttt{total\_numof}. 
+
+\begin{lstlisting}
+function total_numof (t : array (option bool)) (v : option bool) : int =
+  numof t v 0 (length t)
+\end{lstlisting}
+
+Because \texttt{numof} is defined by a set of axioms,
+\texttt{numof} and \verb|total_numof| cannot be used in code and must only appear in annotations.
+%
+Note that \verb|total_numof| is only needed to prove the termination of the \texttt{set\_and\_propagate} function and it is not required for the checkpoint.
+\end{task}
+
+\begin{task}[10 pts]
+Modify and verify the \verb|sat| function to call \verb|set_and_propagate| and the modified functions above. Note that the function \verb|set_and_propagate| will replace the previous function \verb|set_value| in your new implementation of your SAT solver.
+
+The signature of \verb|sat| should remain the same as before:
+\begin{lstlisting}
+let sat (cnf : cnf) : option valuation =
+  ensures  { forall rho:valuation. result = Some rho -> sat_with rho cnf }
+  ensures  { result = None -> unsat cnf }
+\end{lstlisting}
+\end{task}
+
+\subsection{Writeup (Final Submission, 20 pts)}
+
+\begin{task}[20 pts]
+Writeup, to be handed in separately as file \verb|mp2-sol.pdf|.  
+\end{task}
+
+\clearpage
+\section{Testing}
+
+Even though you will be verifying your \texttt{sat} function, writing a correct implementation can be challenging. Therefore, you may want to test that your function is producing the correct output (sat/unsat) for your implementation.
+
+Testing the algorithm and making up CNF formulas can be tedious in Why3. We provide a test module with 10 formulas (5 satisfiable and 5 unsatisfiable).
+
+You can execute the test module for the checkpoint (module Sat) as follows:
+\begin{lstlisting}
+why3 -L . execute test.mlw --use="TestSat" 'all()'
+\end{lstlisting}
+
+A similar command can also be executed for the final submission (module UnitSat):
+\begin{lstlisting}
+why3 -L . execute test.mlw --use="TestUnitSat" 'all()'
+\end{lstlisting}
+
+These commands print the number of ``correct'' answers. The default implementation in the template always returns unsatisfiable and if you run it you should get the following output: 
+
+\begin{lstlisting}
+result: int = 5
+globals: <none>
+\end{lstlisting}
+
+After you implemented the \texttt{sat} function, you should \textbf{expect that number to be 10} if your implementation is correct: 
+
+\begin{lstlisting}
+result: int = 10
+globals: <none>
+\end{lstlisting}
+
+Running all test cases can take a few seconds to run (e.g., the Sat version takes around 10 seconds on my local machine and the UnitSat around 4 seconds). Note that just because you can pass these 10 test cases does not mean the implementation is correct and that is why we want to verify the code so that we can guarantee that for any CNF formula our SAT solver will return the correct answer.
+
+\end{document}

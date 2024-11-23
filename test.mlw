@@ -1,0 +1,801 @@
+module TestSat
+
+use option.Option
+use list.List
+use array.Array
+use int.Int
+use sat.Sat
+
+(* this formula is UNSAT *)
+let test1 () : (option valuation) =
+let cls = make 10 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=4 ; sign=true} Nil);
+cls[1] <- Cons {var=1 ; sign=true} (Cons {var=4 ; sign=true} Nil);
+cls[2] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=true} Nil);
+cls[3] <- Cons {var=2 ; sign=true} (Cons {var=4 ; sign=true} Nil);
+cls[4] <- Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} Nil);
+cls[5] <- Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[6] <- Cons {var=0 ; sign=false} (Cons {var=3 ; sign=true} Nil);
+cls[7] <- Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil);
+cls[8] <- Cons {var=0 ; sign=true} (Cons {var=3 ; sign=true} Nil);
+cls[9] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} Nil);
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test2 () : (option valuation) =
+let cls = make 10 Nil in
+cls[0] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=false} Nil);
+cls[1] <- Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[2] <- Cons {var=1 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[3] <- Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil);
+cls[4] <- Cons {var=0 ; sign=true} (Cons {var=4 ; sign=true} Nil);
+cls[5] <- Cons {var=0 ; sign=true} (Cons {var=3 ; sign=false} Nil);
+cls[6] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=true} Nil);
+cls[7] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} Nil);
+cls[8] <- Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil);
+cls[9] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} Nil);
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test3 () : (option valuation) =
+let cls = make 10 Nil in
+cls[0] <- Cons {var=1 ; sign=false} (Cons {var=4 ; sign=true} Nil);
+cls[1] <- Cons {var=1 ; sign=false} (Cons {var=3 ; sign=false} Nil);
+cls[2] <- Cons {var=1 ; sign=false} (Cons {var=3 ; sign=true} Nil);
+cls[3] <- Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} Nil);
+cls[4] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} Nil);
+cls[5] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} Nil);
+cls[6] <- Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} Nil);
+cls[7] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=false} Nil);
+cls[8] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} Nil);
+cls[9] <- Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil);
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test4 () : (option valuation) =
+let cls = make 10 Nil in
+cls[0] <- Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} Nil);
+cls[1] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=true} Nil);
+cls[2] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=true} Nil);
+cls[3] <- Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil);
+cls[4] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil);
+cls[5] <- Cons {var=0 ; sign=false} (Cons {var=3 ; sign=false} Nil);
+cls[6] <- Cons {var=3 ; sign=true} (Cons {var=4 ; sign=true} Nil);
+cls[7] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} Nil);
+cls[8] <- Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil);
+cls[9] <- Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test5 () : (option valuation) =
+let cls = make 10 Nil in
+cls[0] <- Cons {var=1 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[1] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=true} Nil);
+cls[2] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=true} Nil);
+cls[3] <- Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} Nil);
+cls[4] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} Nil);
+cls[5] <- Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} Nil);
+cls[6] <- Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil);
+cls[7] <- Cons {var=2 ; sign=true} (Cons {var=4 ; sign=false} Nil);
+cls[8] <- Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[9] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} Nil);
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test6 () : (option valuation) =
+let cls = make 0 Nil in
+let formula = { clauses=cls ; nvars=2 } in
+sat formula
+
+(* this formula is UNSAT *)
+let test7 () : (option valuation) =
+let cls = make 1 Nil in
+cls[0] <- Nil;
+let formula = { clauses=cls ; nvars=1 } in
+sat formula
+
+(* this formula is UNSAT *)
+let test8 () : (option valuation) =
+let cls = make 9 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=true} Nil);
+cls[1] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil);
+cls[2] <- Cons {var=4 ; sign=true} (Cons {var=5 ; sign=true} Nil);
+cls[3] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} Nil);
+cls[4] <- Cons {var=0 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[5] <- Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[6] <- Cons {var=1 ; sign=false} (Cons {var=3 ; sign=false} Nil);
+cls[7] <- Cons {var=1 ; sign=false} (Cons {var=5 ; sign=false} Nil);
+cls[8] <- Cons {var=3 ; sign=false} (Cons {var=5 ; sign=false} Nil);
+let formula = { clauses=cls ; nvars=6 } in
+sat formula
+
+(* this formula is UNSAT *)
+let test9 () : (option valuation) =
+let cls = make 22 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} Nil));
+cls[1] <- Cons {var=3 ; sign=true} (Cons {var=4 ; sign=true} (Cons {var=5 ; sign=true} Nil));
+cls[2] <- Cons {var=6 ; sign=true} (Cons {var=7 ; sign=true} (Cons {var=8 ; sign=true} Nil));
+cls[3] <- Cons {var=9 ; sign=true} (Cons {var=10 ; sign=true} (Cons {var=11 ; sign=true} Nil));
+cls[4] <- Cons {var=0 ; sign=false} (Cons {var=3 ; sign=false} Nil);
+cls[5] <- Cons {var=0 ; sign=false} (Cons {var=6 ; sign=false} Nil);
+cls[6] <- Cons {var=0 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[7] <- Cons {var=3 ; sign=false} (Cons {var=6 ; sign=false} Nil);
+cls[8] <- Cons {var=3 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[9] <- Cons {var=6 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[10] <- Cons {var=1 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[11] <- Cons {var=1 ; sign=false} (Cons {var=7 ; sign=false} Nil);
+cls[12] <- Cons {var=1 ; sign=false} (Cons {var=10 ; sign=false} Nil);
+cls[13] <- Cons {var=4 ; sign=false} (Cons {var=7 ; sign=false} Nil);
+cls[14] <- Cons {var=4 ; sign=false} (Cons {var=10 ; sign=false} Nil);
+cls[15] <- Cons {var=7 ; sign=false} (Cons {var=10 ; sign=false} Nil);
+cls[16] <- Cons {var=2 ; sign=false} (Cons {var=5 ; sign=false} Nil);
+cls[17] <- Cons {var=2 ; sign=false} (Cons {var=8 ; sign=false} Nil);
+cls[18] <- Cons {var=2 ; sign=false} (Cons {var=11 ; sign=false} Nil);
+cls[19] <- Cons {var=5 ; sign=false} (Cons {var=8 ; sign=false} Nil);
+cls[20] <- Cons {var=5 ; sign=false} (Cons {var=11 ; sign=false} Nil);
+cls[21] <- Cons {var=8 ; sign=false} (Cons {var=11 ; sign=false} Nil);
+let formula = { clauses=cls ; nvars=12 } in
+sat formula
+
+
+(* this formula is UNSAT *)
+let test10 () : (option valuation) =
+let cls = make 35 Nil in
+cls[0] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} Nil);
+cls[1] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} Nil);
+cls[2] <- Cons {var=0 ; sign=false} (Cons {var=3 ; sign=false} Nil);
+cls[3] <- Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} Nil);
+cls[4] <- Cons {var=1 ; sign=false} (Cons {var=3 ; sign=false} Nil);
+cls[5] <- Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} Nil);
+cls[6] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil)));
+cls[7] <- Cons {var=0 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[8] <- Cons {var=0 ; sign=false} (Cons {var=5 ; sign=false} Nil);
+cls[9] <- Cons {var=0 ; sign=false} (Cons {var=6 ; sign=false} Nil);
+cls[10] <- Cons {var=4 ; sign=false} (Cons {var=5 ; sign=false} Nil);
+cls[11] <- Cons {var=4 ; sign=false} (Cons {var=6 ; sign=false} Nil);
+cls[12] <- Cons {var=5 ; sign=false} (Cons {var=6 ; sign=false} Nil);
+cls[13] <- Cons {var=0 ; sign=true} (Cons {var=4 ; sign=true} (Cons {var=5 ; sign=true} (Cons {var=6 ; sign=true} Nil)));
+cls[14] <- Cons {var=1 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[15] <- Cons {var=1 ; sign=false} (Cons {var=7 ; sign=false} Nil);
+cls[16] <- Cons {var=1 ; sign=false} (Cons {var=8 ; sign=false} Nil);
+cls[17] <- Cons {var=4 ; sign=false} (Cons {var=7 ; sign=false} Nil);
+cls[18] <- Cons {var=4 ; sign=false} (Cons {var=8 ; sign=false} Nil);
+cls[19] <- Cons {var=7 ; sign=false} (Cons {var=8 ; sign=false} Nil);
+cls[20] <- Cons {var=1 ; sign=true} (Cons {var=4 ; sign=true} (Cons {var=7 ; sign=true} (Cons {var=8 ; sign=true} Nil)));
+cls[21] <- Cons {var=2 ; sign=false} (Cons {var=5 ; sign=false} Nil);
+cls[22] <- Cons {var=2 ; sign=false} (Cons {var=7 ; sign=false} Nil);
+cls[23] <- Cons {var=2 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[24] <- Cons {var=5 ; sign=false} (Cons {var=7 ; sign=false} Nil);
+cls[25] <- Cons {var=5 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[26] <- Cons {var=7 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[27] <- Cons {var=2 ; sign=true} (Cons {var=5 ; sign=true} (Cons {var=7 ; sign=true} (Cons {var=9 ; sign=true} Nil)));
+cls[28] <- Cons {var=3 ; sign=false} (Cons {var=6 ; sign=false} Nil);
+cls[29] <- Cons {var=3 ; sign=false} (Cons {var=8 ; sign=false} Nil);
+cls[30] <- Cons {var=3 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[31] <- Cons {var=6 ; sign=false} (Cons {var=8 ; sign=false} Nil);
+cls[32] <- Cons {var=6 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[33] <- Cons {var=8 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[34] <- Cons {var=3 ; sign=true} (Cons {var=6 ; sign=true} (Cons {var=8 ; sign=true} (Cons {var=9 ; sign=true} Nil)));
+let formula = { clauses=cls ; nvars=10 } in
+sat formula
+
+(* this formula is SAT *)
+let test11 () : (option valuation) =
+let cls = make 15 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil))));
+cls[1] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil))));
+cls[2] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[3] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[4] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=true} Nil))));
+cls[5] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil));
+cls[6] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[7] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[8] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[9] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[10] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[11] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[12] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=4 ; sign=false} Nil));
+cls[13] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[14] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is UNSAT *)
+let test12 () : (option valuation) =
+let cls = make 1 Nil in
+cls[0] <- Nil;
+let formula = { clauses=cls ; nvars=0 } in
+sat formula
+
+(* this formula is UNSAT *)
+let test13 () : (option valuation) =
+let cls = make 16 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil))));
+cls[1] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[2] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil))));
+cls[3] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[4] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[5] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=true} Nil))));
+cls[6] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil));
+cls[7] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[8] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[9] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[10] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[11] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[12] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[13] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=4 ; sign=false} Nil));
+cls[14] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[15] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test14 () : (option valuation) =
+let cls = make 15 Nil in
+cls[1] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[2] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil))));
+cls[3] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[4] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[5] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=true} Nil))));
+cls[6] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil));
+cls[7] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[8] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[9] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[10] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[11] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[12] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[13] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=4 ; sign=false} Nil));
+cls[14] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[0] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+
+(* this formula is SAT *)
+let test15 () : (option valuation) =
+let cls = make 15 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil))));
+cls[1] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[3] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[4] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[5] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=true} Nil))));
+cls[6] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil));
+cls[7] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[8] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[9] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[10] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[11] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[12] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[13] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=4 ; sign=false} Nil));
+cls[14] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[2] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test16 () : (option valuation) =
+let cls = make 15 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil))));
+cls[1] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[2] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil))));
+cls[4] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[5] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=true} Nil))));
+cls[6] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil));
+cls[7] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[8] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[9] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[10] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[11] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[12] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[13] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=4 ; sign=false} Nil));
+cls[14] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[3] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+
+
+(* this formula is SAT *)
+let test17 () : (option valuation) =
+let cls = make 15 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil))));
+cls[1] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[2] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil))));
+cls[3] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[5] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=true} Nil))));
+cls[6] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil));
+cls[7] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[8] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[9] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[10] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[11] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[12] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[13] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=4 ; sign=false} Nil));
+cls[14] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[4] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test18 () : (option valuation) =
+let cls = make 15 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil))));
+cls[1] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[2] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil))));
+cls[3] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[4] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[6] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil));
+cls[7] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[8] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[9] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[10] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[11] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[12] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[13] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=4 ; sign=false} Nil));
+cls[14] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[5] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test19 () : (option valuation) =
+let cls = make 2 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=true} Nil);
+cls[1] <- Cons {var=0 ; sign=false} Nil;
+let formula = { clauses=cls ; nvars=2 } in
+sat formula
+
+(* this formula is UNSAT *)
+let test20 () : (option valuation) =
+let cls = make 3 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=true} Nil);
+cls[1] <- Cons {var=0 ; sign=false} Nil;
+cls[2] <- Cons {var=1 ; sign=false} Nil;
+let formula = { clauses=cls ; nvars=2 } in
+sat formula
+
+let half1() : int = 
+let ref correct = 0 in
+if is_none (test1 ()) then correct <- correct + 1 ;
+if not is_none (test2 ()) then correct <- correct + 1 ;
+if not is_none (test3 ()) then correct <- correct + 1 ;
+if not is_none (test4 ()) then correct <- correct + 1 ;
+if not is_none (test5 ()) then correct <- correct + 1 ;
+if not is_none (test6 ()) then correct <- correct + 1 ;
+if is_none (test7 ()) then correct <- correct + 1 ;
+if is_none (test8 ()) then correct <- correct + 1 ;
+if is_none (test9 ()) then correct <- correct + 1 ;
+if is_none (test10 ()) then correct <- correct + 1 ;
+correct 
+
+let half2() : int =
+let ref correct = 0 in
+if not is_none (test11 ()) then correct <- correct + 1 ;
+if is_none (test13 ()) then correct <- correct + 1 ;
+if not is_none (test14 ()) then correct <- correct + 1 ;
+if not is_none (test15 ()) then correct <- correct + 1 ;
+if not is_none (test16 ()) then correct <- correct + 1 ;
+if not is_none (test17 ()) then correct <- correct + 1 ;
+if not is_none (test18 ()) then correct <- correct + 1 ;
+if not is_none (test19 ()) then correct <- correct + 1 ;
+if is_none (test20 ()) then correct <- correct + 1 ;
+correct 
+
+let special1() : int =
+let ref correct = 0 in
+if is_none (test12 ()) then correct <- correct + 1 ;
+correct
+
+let extended () : int = 
+half1()+half2()
+
+let all () : int =
+half1()+half2()+special1()
+
+end
+
+module TestUnitSat
+
+use option.Option
+use list.List
+use array.Array
+use int.Int
+use sat.UnitSat
+
+(* this formula is UNSAT *)
+let test1 () : (option valuation) =
+let cls = make 10 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=4 ; sign=true} Nil);
+cls[1] <- Cons {var=1 ; sign=true} (Cons {var=4 ; sign=true} Nil);
+cls[2] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=true} Nil);
+cls[3] <- Cons {var=2 ; sign=true} (Cons {var=4 ; sign=true} Nil);
+cls[4] <- Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} Nil);
+cls[5] <- Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[6] <- Cons {var=0 ; sign=false} (Cons {var=3 ; sign=true} Nil);
+cls[7] <- Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil);
+cls[8] <- Cons {var=0 ; sign=true} (Cons {var=3 ; sign=true} Nil);
+cls[9] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} Nil);
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test2 () : (option valuation) =
+let cls = make 10 Nil in
+cls[0] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=false} Nil);
+cls[1] <- Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[2] <- Cons {var=1 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[3] <- Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil);
+cls[4] <- Cons {var=0 ; sign=true} (Cons {var=4 ; sign=true} Nil);
+cls[5] <- Cons {var=0 ; sign=true} (Cons {var=3 ; sign=false} Nil);
+cls[6] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=true} Nil);
+cls[7] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} Nil);
+cls[8] <- Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil);
+cls[9] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} Nil);
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test3 () : (option valuation) =
+let cls = make 10 Nil in
+cls[0] <- Cons {var=1 ; sign=false} (Cons {var=4 ; sign=true} Nil);
+cls[1] <- Cons {var=1 ; sign=false} (Cons {var=3 ; sign=false} Nil);
+cls[2] <- Cons {var=1 ; sign=false} (Cons {var=3 ; sign=true} Nil);
+cls[3] <- Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} Nil);
+cls[4] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} Nil);
+cls[5] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} Nil);
+cls[6] <- Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} Nil);
+cls[7] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=false} Nil);
+cls[8] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} Nil);
+cls[9] <- Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil);
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test4 () : (option valuation) =
+let cls = make 10 Nil in
+cls[0] <- Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} Nil);
+cls[1] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=true} Nil);
+cls[2] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=true} Nil);
+cls[3] <- Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil);
+cls[4] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil);
+cls[5] <- Cons {var=0 ; sign=false} (Cons {var=3 ; sign=false} Nil);
+cls[6] <- Cons {var=3 ; sign=true} (Cons {var=4 ; sign=true} Nil);
+cls[7] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} Nil);
+cls[8] <- Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil);
+cls[9] <- Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test5 () : (option valuation) =
+let cls = make 10 Nil in
+cls[0] <- Cons {var=1 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[1] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=true} Nil);
+cls[2] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=true} Nil);
+cls[3] <- Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} Nil);
+cls[4] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} Nil);
+cls[5] <- Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} Nil);
+cls[6] <- Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil);
+cls[7] <- Cons {var=2 ; sign=true} (Cons {var=4 ; sign=false} Nil);
+cls[8] <- Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[9] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} Nil);
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test6 () : (option valuation) =
+let cls = make 0 Nil in
+let formula = { clauses=cls ; nvars=2 } in
+sat formula
+
+(* this formula is UNSAT *)
+let test7 () : (option valuation) =
+let cls = make 1 Nil in
+cls[0] <- Nil;
+let formula = { clauses=cls ; nvars=1 } in
+sat formula
+
+(* this formula is UNSAT *)
+let test8 () : (option valuation) =
+let cls = make 9 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=true} Nil);
+cls[1] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil);
+cls[2] <- Cons {var=4 ; sign=true} (Cons {var=5 ; sign=true} Nil);
+cls[3] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} Nil);
+cls[4] <- Cons {var=0 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[5] <- Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[6] <- Cons {var=1 ; sign=false} (Cons {var=3 ; sign=false} Nil);
+cls[7] <- Cons {var=1 ; sign=false} (Cons {var=5 ; sign=false} Nil);
+cls[8] <- Cons {var=3 ; sign=false} (Cons {var=5 ; sign=false} Nil);
+let formula = { clauses=cls ; nvars=6 } in
+sat formula
+
+(* this formula is UNSAT *)
+let test9 () : (option valuation) =
+let cls = make 22 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} Nil));
+cls[1] <- Cons {var=3 ; sign=true} (Cons {var=4 ; sign=true} (Cons {var=5 ; sign=true} Nil));
+cls[2] <- Cons {var=6 ; sign=true} (Cons {var=7 ; sign=true} (Cons {var=8 ; sign=true} Nil));
+cls[3] <- Cons {var=9 ; sign=true} (Cons {var=10 ; sign=true} (Cons {var=11 ; sign=true} Nil));
+cls[4] <- Cons {var=0 ; sign=false} (Cons {var=3 ; sign=false} Nil);
+cls[5] <- Cons {var=0 ; sign=false} (Cons {var=6 ; sign=false} Nil);
+cls[6] <- Cons {var=0 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[7] <- Cons {var=3 ; sign=false} (Cons {var=6 ; sign=false} Nil);
+cls[8] <- Cons {var=3 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[9] <- Cons {var=6 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[10] <- Cons {var=1 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[11] <- Cons {var=1 ; sign=false} (Cons {var=7 ; sign=false} Nil);
+cls[12] <- Cons {var=1 ; sign=false} (Cons {var=10 ; sign=false} Nil);
+cls[13] <- Cons {var=4 ; sign=false} (Cons {var=7 ; sign=false} Nil);
+cls[14] <- Cons {var=4 ; sign=false} (Cons {var=10 ; sign=false} Nil);
+cls[15] <- Cons {var=7 ; sign=false} (Cons {var=10 ; sign=false} Nil);
+cls[16] <- Cons {var=2 ; sign=false} (Cons {var=5 ; sign=false} Nil);
+cls[17] <- Cons {var=2 ; sign=false} (Cons {var=8 ; sign=false} Nil);
+cls[18] <- Cons {var=2 ; sign=false} (Cons {var=11 ; sign=false} Nil);
+cls[19] <- Cons {var=5 ; sign=false} (Cons {var=8 ; sign=false} Nil);
+cls[20] <- Cons {var=5 ; sign=false} (Cons {var=11 ; sign=false} Nil);
+cls[21] <- Cons {var=8 ; sign=false} (Cons {var=11 ; sign=false} Nil);
+let formula = { clauses=cls ; nvars=12 } in
+sat formula
+
+
+(* this formula is UNSAT *)
+let test10 () : (option valuation) =
+let cls = make 35 Nil in
+cls[0] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} Nil);
+cls[1] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} Nil);
+cls[2] <- Cons {var=0 ; sign=false} (Cons {var=3 ; sign=false} Nil);
+cls[3] <- Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} Nil);
+cls[4] <- Cons {var=1 ; sign=false} (Cons {var=3 ; sign=false} Nil);
+cls[5] <- Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} Nil);
+cls[6] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil)));
+cls[7] <- Cons {var=0 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[8] <- Cons {var=0 ; sign=false} (Cons {var=5 ; sign=false} Nil);
+cls[9] <- Cons {var=0 ; sign=false} (Cons {var=6 ; sign=false} Nil);
+cls[10] <- Cons {var=4 ; sign=false} (Cons {var=5 ; sign=false} Nil);
+cls[11] <- Cons {var=4 ; sign=false} (Cons {var=6 ; sign=false} Nil);
+cls[12] <- Cons {var=5 ; sign=false} (Cons {var=6 ; sign=false} Nil);
+cls[13] <- Cons {var=0 ; sign=true} (Cons {var=4 ; sign=true} (Cons {var=5 ; sign=true} (Cons {var=6 ; sign=true} Nil)));
+cls[14] <- Cons {var=1 ; sign=false} (Cons {var=4 ; sign=false} Nil);
+cls[15] <- Cons {var=1 ; sign=false} (Cons {var=7 ; sign=false} Nil);
+cls[16] <- Cons {var=1 ; sign=false} (Cons {var=8 ; sign=false} Nil);
+cls[17] <- Cons {var=4 ; sign=false} (Cons {var=7 ; sign=false} Nil);
+cls[18] <- Cons {var=4 ; sign=false} (Cons {var=8 ; sign=false} Nil);
+cls[19] <- Cons {var=7 ; sign=false} (Cons {var=8 ; sign=false} Nil);
+cls[20] <- Cons {var=1 ; sign=true} (Cons {var=4 ; sign=true} (Cons {var=7 ; sign=true} (Cons {var=8 ; sign=true} Nil)));
+cls[21] <- Cons {var=2 ; sign=false} (Cons {var=5 ; sign=false} Nil);
+cls[22] <- Cons {var=2 ; sign=false} (Cons {var=7 ; sign=false} Nil);
+cls[23] <- Cons {var=2 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[24] <- Cons {var=5 ; sign=false} (Cons {var=7 ; sign=false} Nil);
+cls[25] <- Cons {var=5 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[26] <- Cons {var=7 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[27] <- Cons {var=2 ; sign=true} (Cons {var=5 ; sign=true} (Cons {var=7 ; sign=true} (Cons {var=9 ; sign=true} Nil)));
+cls[28] <- Cons {var=3 ; sign=false} (Cons {var=6 ; sign=false} Nil);
+cls[29] <- Cons {var=3 ; sign=false} (Cons {var=8 ; sign=false} Nil);
+cls[30] <- Cons {var=3 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[31] <- Cons {var=6 ; sign=false} (Cons {var=8 ; sign=false} Nil);
+cls[32] <- Cons {var=6 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[33] <- Cons {var=8 ; sign=false} (Cons {var=9 ; sign=false} Nil);
+cls[34] <- Cons {var=3 ; sign=true} (Cons {var=6 ; sign=true} (Cons {var=8 ; sign=true} (Cons {var=9 ; sign=true} Nil)));
+let formula = { clauses=cls ; nvars=10 } in
+sat formula
+
+(* this formula is SAT *)
+let test11 () : (option valuation) =
+let cls = make 15 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil))));
+cls[1] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil))));
+cls[2] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[3] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[4] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=true} Nil))));
+cls[5] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil));
+cls[6] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[7] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[8] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[9] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[10] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[11] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[12] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=4 ; sign=false} Nil));
+cls[13] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[14] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is UNSAT *)
+let test12 () : (option valuation) =
+let cls = make 1 Nil in
+cls[0] <- Nil;
+let formula = { clauses=cls ; nvars=0 } in
+sat formula
+
+(* this formula is UNSAT *)
+let test13 () : (option valuation) =
+let cls = make 16 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil))));
+cls[1] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[2] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil))));
+cls[3] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[4] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[5] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=true} Nil))));
+cls[6] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil));
+cls[7] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[8] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[9] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[10] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[11] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[12] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[13] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=4 ; sign=false} Nil));
+cls[14] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[15] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test14 () : (option valuation) =
+let cls = make 15 Nil in
+cls[1] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[2] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil))));
+cls[3] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[4] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[5] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=true} Nil))));
+cls[6] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil));
+cls[7] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[8] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[9] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[10] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[11] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[12] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[13] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=4 ; sign=false} Nil));
+cls[14] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[0] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+
+(* this formula is SAT *)
+let test15 () : (option valuation) =
+let cls = make 15 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil))));
+cls[1] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[3] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[4] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[5] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=true} Nil))));
+cls[6] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil));
+cls[7] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[8] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[9] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[10] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[11] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[12] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[13] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=4 ; sign=false} Nil));
+cls[14] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[2] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test16 () : (option valuation) =
+let cls = make 15 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil))));
+cls[1] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[2] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil))));
+cls[4] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[5] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=true} Nil))));
+cls[6] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil));
+cls[7] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[8] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[9] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[10] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[11] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[12] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[13] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=4 ; sign=false} Nil));
+cls[14] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[3] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+
+
+(* this formula is SAT *)
+let test17 () : (option valuation) =
+let cls = make 15 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil))));
+cls[1] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[2] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil))));
+cls[3] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[5] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=true} Nil))));
+cls[6] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil));
+cls[7] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[8] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[9] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[10] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[11] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[12] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[13] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=4 ; sign=false} Nil));
+cls[14] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[4] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test18 () : (option valuation) =
+let cls = make 15 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil))));
+cls[1] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[2] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} (Cons {var=4 ; sign=false} Nil))));
+cls[3] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[4] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil))));
+cls[6] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} (Cons {var=3 ; sign=true} Nil));
+cls[7] <- Cons {var=2 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[8] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[9] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=false} Nil));
+cls[10] <- Cons {var=0 ; sign=false} (Cons {var=1 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[11] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+cls[12] <- Cons {var=1 ; sign=true} (Cons {var=3 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[13] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=true} (Cons {var=4 ; sign=false} Nil));
+cls[14] <- Cons {var=0 ; sign=true} (Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil));
+cls[5] <- Cons {var=0 ; sign=false} (Cons {var=2 ; sign=false} (Cons {var=3 ; sign=true} Nil));
+let formula = { clauses=cls ; nvars=5 } in
+sat formula
+
+(* this formula is SAT *)
+let test19 () : (option valuation) =
+let cls = make 2 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=true} Nil);
+cls[1] <- Cons {var=0 ; sign=false} Nil;
+let formula = { clauses=cls ; nvars=2 } in
+sat formula
+
+(* this formula is UNSAT *)
+let test20 () : (option valuation) =
+let cls = make 3 Nil in
+cls[0] <- Cons {var=0 ; sign=true} (Cons {var=1 ; sign=true} Nil);
+cls[1] <- Cons {var=0 ; sign=false} Nil;
+cls[2] <- Cons {var=1 ; sign=false} Nil;
+let formula = { clauses=cls ; nvars=2 } in
+sat formula
+
+let half1() : int = 
+let ref correct = 0 in
+if is_none (test1 ()) then correct <- correct + 1 ;
+if not is_none (test2 ()) then correct <- correct + 1 ;
+if not is_none (test3 ()) then correct <- correct + 1 ;
+if not is_none (test4 ()) then correct <- correct + 1 ;
+if not is_none (test5 ()) then correct <- correct + 1 ;
+if not is_none (test6 ()) then correct <- correct + 1 ;
+if is_none (test7 ()) then correct <- correct + 1 ;
+if is_none (test8 ()) then correct <- correct + 1 ;
+if is_none (test9 ()) then correct <- correct + 1 ;
+if is_none (test10 ()) then correct <- correct + 1 ;
+correct 
+
+let half2() : int =
+let ref correct = 0 in
+if not is_none (test11 ()) then correct <- correct + 1 ;
+if is_none (test13 ()) then correct <- correct + 1 ;
+if not is_none (test14 ()) then correct <- correct + 1 ;
+if not is_none (test15 ()) then correct <- correct + 1 ;
+if not is_none (test16 ()) then correct <- correct + 1 ;
+if not is_none (test17 ()) then correct <- correct + 1 ;
+if not is_none (test18 ()) then correct <- correct + 1 ;
+if not is_none (test19 ()) then correct <- correct + 1 ;
+if is_none (test20 ()) then correct <- correct + 1 ;
+correct 
+
+let special1() : int =
+let ref correct = 0 in
+if is_none (test12 ()) then correct <- correct + 1 ;
+correct
+
+let extended () : int = 
+half1()+half2()
+
+let all () : int =
+half1()+half2()+special1()
+
+end

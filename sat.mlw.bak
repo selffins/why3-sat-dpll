@@ -1,0 +1,444 @@
+module NumOf
+
+use int.Int
+use array.Array
+use array.NumOfEq
+use option.Option
+
+(* @ boolean equality *)
+let function (==) (a b : bool) : bool =
+    ensures { result <-> ((not a /\ not b) \/ (a /\ b)) }
+    match a with
+    | True -> b
+    | False -> not b
+    end
+
+(* @ option bool equality *)    
+let function (=?) (a b : option bool) : bool =
+  match a with
+  | None -> match b with
+            | None -> true
+            | Some _ -> false
+            end
+  | Some a' -> match b with
+               | None -> false
+               | Some b' -> a' == b'
+                end
+  end
+
+(* @ counts v in t *)
+function total_numof (t : array (option bool)) (v : option bool) : int =
+  numof t v 0 (length t)
+
+(* @ number of v in t decreases  by induction on length of t *)    
+let lemma numof_decreases (v : option bool) (t t' : array (option bool)) (i : int) =
+  requires { length t = length t'  }
+  requires { 0 <= i < length t /\ t[i] = v /\ t'[i] <> v }
+  requires { forall j:int. 0 <= j < length t -> j <> i -> t[j] = t'[j] }
+  ensures  { total_numof t' v = total_numof t v - 1 }
+  let rec aux (j : int) : int =
+    variant  { j }
+    requires { 0 <= j <= length t }
+    ensures  { result = numof t v 0 j }
+    ensures  { j <= i -> numof t' v 0 j = result }
+    ensures  { j > i  -> numof t' v 0 j = result - 1 }
+    
+    if j = 0 then 0
+    else if j = i+1 then aux (j-1) + 1
+    else if t[j-1] =? v then aux (j-1) + 1
+    else aux (j-1)
+    
+  in let _ = aux (length t) in ()
+
+end
+
+module Sat
+
+use int.Int
+use ref.Ref
+use list.List
+use list.Length
+use list.Mem
+use array.Array
+use array.ArrayEq
+use array.NumOfEq
+use option.Option
+use ref.Ref
+use NumOf
+
+(******************************************************************************)
+(* Basic types and predicates, from previous assignment                       *)
+(******************************************************************************)
+
+let function (==) (a b : bool) : bool =
+    ensures { result <-> ((not a /\ not b) \/ (a /\ b)) }
+    match a with
+    | True -> b
+    | False -> not b
+    end
+
+type var = int
+
+type lit = { var : var ; sign : bool }
+
+type clause = list lit
+
+(* valid range of variables *)
+predicate vars_in_range (n : int) (c : clause) =
+  forall l:lit. mem l c -> 0 <= l.var < n
+
+type cnf = { clauses : array clause ; nvars : int }
+  invariant { nvars >= 0 }
+  invariant { forall i:int. 0 <= i < length clauses ->
+              vars_in_range nvars clauses[i] }
+  by { clauses = Array.make 0 Nil; nvars = 0 }
+
+type valuation = array bool
+
+(* valid valuation *)
+predicate valid_valuation (rho : valuation) (cnf : cnf) =
+  length rho = cnf.nvars
+
+(* clause is satisfied with rho valuation *)
+predicate clause_sat_with (rho : valuation) (c : clause) =
+  exists l:lit. mem l c && rho[l.var] == l.sign
+
+(* formula is satisfied with rho valuation *)
+predicate sat_with (rho : valuation) (cnf : cnf) =
+  forall i:int. 0 <= i < length cnf.clauses ->
+  clause_sat_with rho cnf.clauses[i]
+
+(* formula is unsatisfied *)
+predicate unsat (cnf : cnf) =
+  forall rho:valuation. valid_valuation rho cnf -> not (sat_with rho cnf)
+
+(******************************************************************************)
+(* Partial valuations                                                         *)
+(******************************************************************************)
+
+type pval = array (option bool)
+
+predicate compatible (pval : pval) (rho : valuation) =
+  forall i:int, b:bool. 0 <= i < length pval ->
+  pval[i] = Some b -> rho[i] = b
+
+predicate sat_with_pval (pval : pval) (cnf : cnf) =
+  forall rho:valuation. compatible pval rho -> sat_with rho cnf
+
+(* you may want to write other predicates to help writing your specifications *)
+
+predicate valid_pval (pval : pval) (cnf : cnf) =
+    length pval = cnf.nvars
+
+predicate none_or_eq (a : option bool) (b : bool) =
+    match a with
+    | None      -> True
+    | Some a'   -> a' == b
+    end
+
+predicate some_and_eq (a : option bool) (b : bool) =
+    match a with
+    | None      -> False
+    | Some a'   -> a' == b
+    end
+
+(* @ ? Q V/ . assigns cnf[i] to true or pval[i] *)
+(* ?  do we need to mark as ghost? do we need to ensure non-modification? *)
+let extract_sat_valuation (pval : pval) (ghost cnf : cnf) : valuation =
+    requires { valid_pval pval cnf }
+    ensures  { forall j. 0 <= j < length pval -> old pval[j] = pval[j] }
+    ensures  { valid_valuation result cnf }
+    ensures  { compatible pval result}
+    let valuation = Array.make (length pval) True in
+    for i = 0 to length pval - 1 do
+    invariant { forall j. 0 <= j < i -> old pval[j] =? pval[j] } 
+    invariant { forall j. 0 <= j < i -> none_or_eq pval[j] valuation[j] }
+        match pval[i] with
+            | None      -> continue
+            | Some b    -> valuation[i] <- b
+        end        
+    done;
+    valuation
+
+
+(******************************************************************************)
+(* Partial evaluation of CNFs                                                 *)
+(******************************************************************************)
+
+type clause_status =
+  | Satisfied
+  | Conflicting
+  | Unresolved
+
+type cnf_status =
+  | Sat
+  | Conflict
+  | Other
+
+exception Sat_found
+exception Conflict_found
+
+predicate literals_in_0_to_n (n : int) (c : clause) =
+    match c with
+    | Nil       -> True
+    | Cons l c' -> 0 <= l.var < n /\ literals_in_0_to_n n c'
+    end
+    
+predicate valid_pval_clause (pval : pval) (c : clause) =
+    literals_in_0_to_n (length pval) c 
+
+predicate clause_sat_with_pval (pval : pval) (c : clause) =
+    exists l:lit. mem l c && some_and_eq pval[l.var] l.sign
+
+predicate clause_conf_with_pval (pval : pval) (c : clause) =
+    forall l:lit. mem l c -> some_and_eq pval[l.var] (not l.sign)
+
+predicate clause_unresolved_with_pval (pval : pval) (c : clause) =
+    not clause_sat_with_pval pval c /\
+    exists l:lit. mem l c && pval[l.var] = None
+
+(* @? *)
+let rec partial_eval_clause (pval : pval) (c : clause) : clause_status =
+    requires { valid_pval_clause pval c }
+    ensures {
+        match result with
+        |   Satisfied   -> clause_sat_with_pval pval c
+        |   Conflicting -> clause_conf_with_pval pval c
+        |   Unresolved  -> clause_unresolved_with_pval pval c
+        end
+    }
+    ensures  { forall i. 0 <= i < length pval -> old pval[i] = pval[i] }    
+    variant  { c }
+    match c with
+    |   Nil         ->  Conflicting 
+    |   Cons l c'   ->  match pval[l.var] with
+                        | None   -> match partial_eval_clause pval c' with
+                                    |  Satisfied -> Satisfied
+                                    |  _ -> Unresolved
+                                    end
+                        | Some b -> if b == l.sign then Satisfied else partial_eval_clause pval c'
+                        end
+    end 
+
+predicate cnf_sat_with_pval (pval : pval) (cnf : cnf)  = 
+    forall i. 0 <= i < length cnf.clauses -> clause_sat_with_pval pval cnf.clauses[i]
+    
+predicate cnf_other_with_pval (pval : pval) (cnf : cnf)  =
+    exists i. 0 <= i < length cnf.clauses && clause_unresolved_with_pval pval cnf.clauses[i]
+
+predicate cnf_conflict_with_pval (pval : pval) (cnf : cnf) =
+    exists i. 0 <= i < length cnf.clauses && clause_conf_with_pval pval cnf.clauses[i]
+    
+let rec aux (pval : pval) (cnf : cnf) (i : int) : cnf_status =
+    requires { 0 <= i <= length cnf.clauses}
+    requires { forall j. 0 <= j < length cnf.clauses -> valid_pval_clause pval cnf.clauses[j] }
+    requires { valid_pval pval cnf }
+    requires { forall j. 0 <= j < i -> clause_sat_with_pval pval cnf.clauses[j]}
+    ensures { forall j. 0 <= j < i -> old pval[j] = pval[j] }
+    ensures { forall j. 0 <= j < i -> old cnf.clauses[j] = cnf.clauses[j]}
+    ensures {
+         match result with
+        | Sat      -> cnf_sat_with_pval pval cnf 
+        | Conflict -> cnf_conflict_with_pval pval cnf 
+        | Other    -> cnf_other_with_pval pval cnf 
+        end
+    }
+    raises {
+        Conflict_found -> cnf_conflict_with_pval pval cnf 
+    }
+    variant { length cnf.clauses - i }
+    if i < length cnf.clauses then
+        match partial_eval_clause pval cnf.clauses[i] with
+        | Satisfied    -> aux pval cnf (i + 1) 
+        | Conflicting  -> raise Conflict_found
+        | Unresolved   -> Other
+        end
+    else
+        Sat
+        
+            
+let partial_eval_cnf (pval : pval) (cnf : cnf) : cnf_status =
+    requires { valid_pval pval cnf }
+    requires { forall i. 0 <= i < length cnf.clauses -> valid_pval_clause pval cnf.clauses[i] }
+    raises {
+        Conflict_found -> cnf_conflict_with_pval pval cnf
+    }
+    ensures { forall j. 0 <= j < length cnf.clauses -> old pval[j] = pval[j] }
+    ensures { forall j. 0 <= j < length cnf.clauses -> old cnf.clauses[j] = cnf.clauses[j]}
+    ensures {
+         match result with
+         | Sat      -> cnf_sat_with_pval pval cnf
+         | Conflict -> cnf_conflict_with_pval pval cnf 
+         | Other    -> cnf_other_with_pval pval cnf 
+        end
+    }    
+    aux pval cnf 0
+   
+    
+(******************************************************************************)
+(* Backtracking mechanism for partial valuations                              *)
+(******************************************************************************)
+
+(* pval and pval' agree outside of diff, and diff elements are unassigned in pval *)    
+predicate delta (diff : list var) (pval pval' : pval) =
+  (length pval = length pval') /\
+  (forall v:var. mem v diff ->
+     0 <= v < length pval /\ not (pval[v] <> None)) /\
+  (forall v:var. 0 <= v < length pval ->
+     not (mem v diff) -> pval[v] = pval'[v])
+        
+let rec backtrack (diff : list var) (pval : pval) (ghost old_pval : pval) : () =
+     requires { delta diff old_pval pval }
+     ensures  { forall i. 0 <= i < length pval -> old_pval[i] = pval[i] }
+     ensures  { forall i. 0 <= i < length old_pval -> old old_pval[i] = old_pval[i] }
+     ensures  {  match diff with
+                 | Nil          -> forall i. 0 <= i < length pval -> old pval[i] = pval[i]
+                 | Cons x _     -> forall i. 0 <= i < length pval /\ not (i = x) -> old pval[i] = pval[i]
+                 end }
+     variant { diff }
+     match diff with
+     |  Nil          -> ()
+     |  Cons x diff' -> pval[x] <- None ;
+                        backtrack diff' pval old_pval
+     end
+
+let set_value (l : lit) (pval : pval) (cnf : cnf) : (bool, list var) = absurd
+
+
+(******************************************************************************)
+(* Main algorithm                                                             *)
+(****************************************   **************************************)
+
+let sat (cnf : cnf) : option valuation = None
+
+end
+
+module UnitSat
+
+use int.Int
+use ref.Ref
+use list.List
+use list.Length
+use list.Mem
+use array.Array
+use array.ArrayEq
+use array.NumOfEq
+use option.Option
+
+(******************************************************************************)
+(* Basic types and predicates, from previous assignment                       *)
+(******************************************************************************)
+
+let function (==) (a b : bool) : bool =
+    ensures { result <-> ((not a /\ not b) \/ (a /\ b)) }
+    match a with
+    | True -> b
+    | False -> not b
+    end
+
+type var = int
+
+type lit = { var : var ; sign : bool }
+
+type clause = list lit
+
+(* @ valid range of variables *)
+predicate vars_in_range (n : int) (c : clause) =
+  forall l:lit. mem l c -> 0 <= l.var < n
+
+type cnf = { clauses : array clause ; nvars : int }
+  invariant { nvars >= 0 }
+  invariant { forall i:int. 0 <= i < length clauses ->
+              vars_in_range nvars clauses[i] }
+  by { clauses = Array.make 0 Nil; nvars = 0 }
+
+type valuation = array bool
+
+(* @ valid valuation: valuation has correct number of variables *)
+predicate valid_valuation (rho : valuation) (cnf : cnf) =
+  length rho = cnf.nvars
+
+(* @ clause is satisfied with rho valuation: rho has assignment making 1 literal true *)
+predicate clause_sat_with (rho : valuation) (c : clause) =
+  exists l:lit. mem l c && rho[l.var] = l.sign
+
+(* @ formula is satisfied with rho valuation: all clauses are satisfied by rho *)
+predicate sat_with (rho : valuation) (cnf : cnf) =
+  forall i:int. 0 <= i < length cnf.clauses ->
+  clause_sat_with rho cnf.clauses[i]
+
+(* @ formula is unsatisfied: all (valid) valuations rho does not satisfy cnf *)
+predicate unsat (cnf : cnf) =
+  forall rho:valuation. valid_valuation rho cnf -> not (sat_with rho cnf)
+
+(******************************************************************************)
+(* Partial valuations                                                         *)
+(******************************************************************************)
+
+type pval = array (option bool)
+
+(* @ compatible if agree in all assignments *)    
+predicate compatible (pval : pval) (rho : valuation) =
+  forall i:int, b:bool. 0 <= i < length pval ->
+  pval[i] = Some b -> rho[i] = b
+
+(* @ all compatible rho with pval also satisfies cnf *)
+predicate sat_with_pval (pval : pval) (cnf : cnf) =
+  forall rho:valuation. compatible pval rho -> sat_with rho cnf
+
+(* you may want to write other predicates to help writing your specifications *)
+
+let extract_sat_valuation (pval : pval) (ghost cnf : cnf) : valuation =
+    absurd
+     
+
+(******************************************************************************)
+(* Partial evaluation of CNFs                                                 *)
+(******************************************************************************)
+
+type clause_status =
+  | Satisfied
+  | Conflicting
+  | Unit lit
+  | Unresolved
+
+type cnf_status =
+  | Sat
+  | Conflict
+  | Unit_clause lit
+  | Other
+
+exception Sat_found
+exception Conflict_found
+exception Unit_found lit
+
+let rec partial_eval_clause (pval : pval) (c : clause) : clause_status = absurd
+
+let partial_eval_cnf (pval : pval) (cnf : cnf) : cnf_status = absurd
+
+(******************************************************************************)
+(* Backtracking mechanism for partial valuations                              *)
+(******************************************************************************)
+
+predicate delta (diff : list var) (pval pval' : pval) =
+  (length pval = length pval') /\
+  (forall v:var. mem v diff ->
+     0 <= v < length pval /\ not (pval[v] <> None)) /\
+  (forall v:var. 0 <= v < length pval ->
+     not (mem v diff) -> pval[v] = pval'[v])
+     
+let rec backtrack (diff : list var) (pval : pval) (ghost old_pval : pval) = absurd
+
+(******************************************************************************)
+(* Unit clause propagation                                                    *)
+(******************************************************************************)
+
+let set_and_propagate (l : lit) (pval : pval) (cnf : cnf) : (bool, list var) = absurd
+
+(******************************************************************************)
+(* Main algorithm                                                             *)
+(******************************************************************************)
+
+let sat (cnf : cnf) : option valuation = None
+
+end
