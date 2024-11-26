@@ -2,108 +2,144 @@
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="6">
-<prover id="0" name="Alt-Ergo" version="2.4.0" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="0" name="Alt-Ergo" version="2.4.0" timelimit="1" steplimit="0" memlimit="1000"/>
 <prover id="2" name="Z3" version="4.8.6" timelimit="1" steplimit="0" memlimit="1000"/>
-<prover id="3" name="CVC4" version="1.8" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="3" name="CVC4" version="1.8" timelimit="1" steplimit="0" memlimit="1000"/>
 <file format="whyml">
 <path name=".."/><path name="sat.mlw"/>
 <theory name="NumOf" proved="true">
  <goal name="infix ==&#39;vc" expl="VC for infix ==" proved="true">
- <proof prover="3"><result status="valid" time="0.032368" steps="4905"/></proof>
+ <proof prover="2"><result status="valid" time="0.036664" steps="20130"/></proof>
  </goal>
  <goal name="numof_decreases&#39;vc" expl="VC for numof_decreases" proved="true">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="6925"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="2459997"/></proof>
+ <proof prover="3"><result status="timeout" time="1.000000" steps="115283"/></proof>
  <transf name="split_vc" proved="true" >
   <goal name="numof_decreases&#39;vc.0" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.018604" steps="2375"/></proof>
+  <proof prover="2"><result status="valid" time="0.015176" steps="2375"/></proof>
   </goal>
   <goal name="numof_decreases&#39;vc.1" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.045313" steps="31291"/></proof>
+  <proof prover="2"><result status="valid" time="0.016710" steps="31291"/></proof>
   </goal>
   <goal name="numof_decreases&#39;vc.2" expl="index in array bounds" proved="true">
-  <proof prover="2"><result status="valid" time="0.033883" steps="30490"/></proof>
+  <proof prover="2"><result status="valid" time="0.031099" steps="30490"/></proof>
   </goal>
   <goal name="numof_decreases&#39;vc.3" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.020683" steps="2523"/></proof>
+  <proof prover="2"><result status="valid" time="0.020086" steps="2523"/></proof>
   </goal>
   <goal name="numof_decreases&#39;vc.4" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.026368" steps="32346"/></proof>
+  <proof prover="2"><result status="valid" time="0.035338" steps="32346"/></proof>
   </goal>
   <goal name="numof_decreases&#39;vc.5" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.018911" steps="2527"/></proof>
+  <proof prover="2"><result status="valid" time="0.022966" steps="2527"/></proof>
   </goal>
   <goal name="numof_decreases&#39;vc.6" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.024460" steps="32394"/></proof>
+  <proof prover="2"><result status="valid" time="0.024889" steps="32394"/></proof>
   </goal>
   <goal name="numof_decreases&#39;vc.7" expl="postcondition" proved="true">
+  <proof prover="0"><result status="timeout" time="1.000000" steps="8599"/></proof>
+  <proof prover="2"><result status="timeout" time="1.000000" steps="2406500"/></proof>
+  <proof prover="3"><result status="timeout" time="1.000000" steps="157047"/></proof>
   <transf name="split_vc" proved="true" >
    <goal name="numof_decreases&#39;vc.7.0" expl="postcondition" proved="true">
-   <proof prover="2"><result status="valid" time="0.022537" steps="34078"/></proof>
+   <proof prover="2"><result status="valid" time="0.019550" steps="34078"/></proof>
    </goal>
    <goal name="numof_decreases&#39;vc.7.1" expl="postcondition" proved="true">
-   <proof prover="0" timelimit="1"><result status="timeout" time="1.000000" steps="8156"/></proof>
-   <proof prover="2"><result status="timeout" time="1.000000" steps="2630847"/></proof>
-   <proof prover="3" timelimit="1"><result status="timeout" time="1.000000" steps="116920"/></proof>
+   <proof prover="0"><result status="timeout" time="1.000000" steps="9196"/></proof>
+   <proof prover="2"><result status="timeout" time="1.000000" steps="2676669"/></proof>
+   <proof prover="3"><result status="timeout" time="1.000000" steps="120421"/></proof>
    <transf name="split_vc" proved="true" >
     <goal name="numof_decreases&#39;vc.7.1.0" expl="postcondition" proved="true">
-    <proof prover="2"><result status="valid" time="0.032725" steps="49571"/></proof>
+    <proof prover="2"><result status="valid" time="0.016185" steps="49571"/></proof>
     </goal>
     <goal name="numof_decreases&#39;vc.7.1.1" expl="postcondition" proved="true">
-    <proof prover="0" timelimit="1"><result status="valid" time="0.611029" steps="4780"/></proof>
+    <proof prover="0"><result status="valid" time="0.507319" steps="4780"/></proof>
     </goal>
    </transf>
    </goal>
   </transf>
   </goal>
   <goal name="numof_decreases&#39;vc.8" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.077266" steps="168303"/></proof>
+  <proof prover="2"><result status="valid" time="0.081260" steps="168303"/></proof>
   </goal>
   <goal name="numof_decreases&#39;vc.9" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.112766" steps="296060"/></proof>
+  <proof prover="2"><result status="valid" time="0.122510" steps="296060"/></proof>
   </goal>
   <goal name="numof_decreases&#39;vc.10" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.025940" steps="29588"/></proof>
+  <proof prover="2"><result status="valid" time="0.022710" steps="29588"/></proof>
   </goal>
   <goal name="numof_decreases&#39;vc.11" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.032552" steps="46242"/></proof>
+  <proof prover="2"><result status="valid" time="0.034397" steps="46242"/></proof>
   </goal>
  </transf>
  </goal>
 </theory>
-<theory name="Sat" proved="true">
+<theory name="Sat">
  <goal name="infix ==&#39;vc" expl="VC for infix ==" proved="true">
- <proof prover="0"><result status="valid" time="0.015557" steps="2"/></proof>
+ <proof prover="2"><result status="valid" time="0.014309" steps="30436"/></proof>
  </goal>
  <goal name="cnf&#39;vc" expl="VC for cnf" proved="true">
- <proof prover="3"><result status="valid" time="0.052434" steps="9974"/></proof>
+ <proof prover="2"><result status="valid" time="0.023853" steps="42789"/></proof>
  </goal>
  <goal name="extract_sat_valuation&#39;vc" expl="VC for extract_sat_valuation" proved="true">
- <proof prover="3"><result status="valid" time="0.251286" steps="34937"/></proof>
+ <proof prover="3"><result status="valid" time="0.316685" steps="42806"/></proof>
+ </goal>
+ <goal name="valid_pval_cnf_clause" proved="true">
+ <proof prover="2"><result status="valid" time="0.032424" steps="48159"/></proof>
+ </goal>
+ <goal name="clause_mem_none" proved="true">
+ <proof prover="0"><result status="valid" time="0.032081" steps="118"/></proof>
+ </goal>
+ <goal name="sat_no_conf" proved="true">
+ <proof prover="0"><result status="valid" time="0.045509" steps="412"/></proof>
+ </goal>
+ <goal name="clause_sat_equivalence" proved="true">
+ <proof prover="2"><result status="valid" time="0.028510" steps="45295"/></proof>
+ </goal>
+ <goal name="clause_early_result" proved="true">
+ <proof prover="2"><result status="valid" time="0.048351" steps="67727"/></proof>
  </goal>
  <goal name="partial_eval_clause&#39;vc" expl="VC for partial_eval_clause" proved="true">
- <proof prover="0"><result status="valid" time="0.782650" steps="6340"/></proof>
+ <proof prover="3"><result status="valid" time="0.715203" steps="119338"/></proof>
  </goal>
- <goal name="aux&#39;vc" expl="VC for aux" proved="true">
- <proof prover="0"><result status="valid" time="0.733406" steps="6999"/></proof>
+ <goal name="p_eq_compatible" proved="true">
+ <proof prover="2"><result status="valid" time="0.045950" steps="60753"/></proof>
  </goal>
- <goal name="partial_eval_cnf&#39;vc" expl="VC for partial_eval_cnf" proved="true">
- <proof prover="2" timelimit="5"><result status="valid" time="0.032526" steps="68717"/></proof>
+ <goal name="aux&#39;vc" expl="VC for aux">
+ </goal>
+ <goal name="partial_eval_cnf&#39;vc" expl="VC for partial_eval_cnf">
  </goal>
  <goal name="backtrack&#39;vc" expl="VC for backtrack" proved="true">
- <proof prover="3"><result status="valid" time="0.130121" steps="18343"/></proof>
+ <proof prover="3"><result status="valid" time="0.156647" steps="20954"/></proof>
  </goal>
- <goal name="set_value&#39;vc" expl="VC for set_value" proved="true">
- <proof prover="2" timelimit="5"><result status="valid" time="0.074763" steps="151373"/></proof>
+ <goal name="set_value&#39;vc" expl="VC for set_value">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="10545"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="1732153"/></proof>
+ <proof prover="3"><result status="unknown" time="0.054926" steps="11793"/></proof>
+ <transf name="split_vc" >
+  <goal name="set_value&#39;vc.0" expl="unreachable point">
+  <proof prover="0"><result status="timeout" time="1.000000" steps="10673"/></proof>
+  <proof prover="2"><result status="timeout" time="1.000000" steps="1965142"/></proof>
+  <proof prover="3"><result status="unknown" time="0.068412" steps="11753"/></proof>
+  <transf name="split_vc" >
+   <goal name="set_value&#39;vc.0.0" expl="unreachable point">
+   <proof prover="0" timelimit="10" memlimit="4000"><undone/></proof>
+   <proof prover="2" timelimit="10" memlimit="4000"><undone/></proof>
+   <proof prover="3" timelimit="10" memlimit="4000"><result status="unknown" time="0.058332" steps="11750"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
  </goal>
  <goal name="sat&#39;vc" expl="VC for sat" proved="true">
- <proof prover="3"><result status="valid" time="0.038651" steps="8347"/></proof>
+ <proof prover="2"><result status="valid" time="0.018769" steps="4419"/></proof>
  </goal>
 </theory>
 <theory name="UnitSat">
- <goal name="infix ==&#39;vc" expl="VC for infix ==" proved="true">
- <proof prover="2"><result status="valid" time="0.024813" steps="24809"/></proof>
+ <goal name="infix ==&#39;vc" expl="VC for infix ==">
  </goal>
- <goal name="cnf&#39;vc" expl="VC for cnf" proved="true">
- <proof prover="2"><result status="valid" time="0.025791" steps="36635"/></proof>
+ <goal name="cnf&#39;vc" expl="VC for cnf">
  </goal>
  <goal name="extract_sat_valuation&#39;vc" expl="VC for extract_sat_valuation">
  </goal>
@@ -115,8 +151,7 @@
  </goal>
  <goal name="set_and_propagate&#39;vc" expl="VC for set_and_propagate">
  </goal>
- <goal name="sat&#39;vc" expl="VC for sat" proved="true">
- <proof prover="2"><result status="valid" time="0.022245" steps="2676"/></proof>
+ <goal name="sat&#39;vc" expl="VC for sat">
  </goal>
 </theory>
 </file>
