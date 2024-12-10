@@ -19,7 +19,7 @@ cls[6] <- Cons {var=0 ; sign=false} (Cons {var=3 ; sign=true} Nil);
 cls[7] <- Cons {var=2 ; sign=false} (Cons {var=4 ; sign=true} Nil);
 cls[8] <- Cons {var=0 ; sign=true} (Cons {var=3 ; sign=true} Nil);
 cls[9] <- Cons {var=1 ; sign=true} (Cons {var=2 ; sign=true} Nil);
-let formula = { clauses=cls ; nvars=5 } in
+let formula = { clauses=cls ; nvars=5 } in 
 sat formula
 
 (* this formula is SAT *)
@@ -398,7 +398,6 @@ let all () : int =
 half1()+half2()+special1()
 
 end
-
 module TestUnitSat
 
 use option.Option

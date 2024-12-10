@@ -353,29 +353,29 @@ let set_value (l : lit) (pval : pval) (cnf : cnf) : (bool, list var) =
     with
         | Conflict_found -> (True, Cons l.var Nil)
     end
-let next_var (n : var)  =
-    n + 1
 
-let rec sat_aux (cnf : cnf) (pval : pval) (v : var) (ghost old_pval : pval) =
+
+let rec sat_aux (cnf : cnf) (pval : pval) (l : list var) (v : int) (ghost old_pval : pval) =
     requires { valid_pval pval cnf }
+    requires { v = Length.length l }
     requires { 0 <= v <= length pval }
-    requires { v <> length pval -> pval[v] = None }
-    requires { forall i. 0 <= i < v -> pval[i] <> None }
-    
+    requires { forall i. 0 <= i < v -> (pval[i] <> None /\  Mem.mem i l) }
+    requires { forall i. v <= i < length pval -> pval[i] = None }
+    ensures  { not sat_with_pval old_pval cnf }
     raises { Sat_found -> p_sat pval cnf }
     variant { length pval - v }
-    let curr_pval = Array.copy pval in
+    let curr_pval = Array.copy pval in 
     if v = length pval then () else (
     (
     let (conflict, diff) = set_value { var = v ; sign = true } pval cnf in
-       if not conflict
-       then sat_aux cnf pval (next_var v) curr_pval
+      if not conflict
+       then sat_aux cnf pval (Cons (v+1) l) (v+1) curr_pval
        else backtrack diff pval curr_pval
     );
     (
     let (conflict, diff) = set_value { var = v ; sign = false } pval cnf in
         if not conflict
-        then sat_aux cnf pval (next_var v) curr_pval
+        then sat_aux cnf pval (Cons (v+1) l) (v+1) curr_pval
         else
             (backtrack diff pval old_pval); 
     )
@@ -387,7 +387,7 @@ let sat (cnf : cnf) : option valuation =
     let pval = Array.make cnf.nvars None in
     let old_pval = Array.make cnf.nvars None in
     try
-        let _ = sat_aux cnf pval 0 old_pval in
+        let _ = sat_aux cnf pval Nil 0 old_pval in
         None
     with
         | Sat_found -> Some (extract_sat_valuation pval cnf)

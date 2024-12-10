@@ -2,106 +2,169 @@
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="6">
-<prover id="0" name="Alt-Ergo" version="2.4.0" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="0" name="Alt-Ergo" version="2.4.0" timelimit="1" steplimit="0" memlimit="1000"/>
 <prover id="2" name="Z3" version="4.8.6" timelimit="1" steplimit="0" memlimit="1000"/>
-<prover id="3" name="CVC4" version="1.8" timelimit="5" steplimit="0" memlimit="1000"/>
-<file format="whyml">
+<prover id="3" name="CVC4" version="1.8" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="whyml" proved="true">
 <path name=".."/><path name="sat.mlw"/>
-<theory name="NumOf" proved="true">
- <goal name="infix ==&#39;vc" expl="VC for infix ==" proved="true">
- <proof prover="3"><result status="valid" time="0.032368" steps="4905"/></proof>
+<theory name="Sat">
+ <goal name="infix ==&#39;vc" expl="VC for infix ==">
+ <proof prover="0" timelimit="5"><result status="valid" time="0.015557" steps="2"/></proof>
  </goal>
- <goal name="numof_decreases&#39;vc" expl="VC for numof_decreases" proved="true">
- <transf name="split_vc" proved="true" >
-  <goal name="numof_decreases&#39;vc.0" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.018604" steps="2375"/></proof>
+ <goal name="cnf&#39;vc" expl="VC for cnf">
+ <proof prover="3" timelimit="5"><result status="valid" time="0.052434" steps="9974"/></proof>
+ </goal>
+ <goal name="extract_sat_valuation&#39;vc" expl="VC for extract_sat_valuation">
+ <proof prover="3" timelimit="5"><result status="valid" time="0.251286" steps="34937"/></proof>
+ </goal>
+ <goal name="partial_eval_clause&#39;vc" expl="VC for partial_eval_clause">
+ <proof prover="0" timelimit="5"><result status="valid" time="0.782650" steps="6340"/></proof>
+ </goal>
+ <goal name="aux&#39;vc" expl="VC for aux">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="6122"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="2669383"/></proof>
+ <proof prover="3"><result status="timeout" time="1.000000" steps="229993"/></proof>
+ <transf name="split_vc" >
+  <goal name="aux&#39;vc.0" expl="index in array bounds">
+  <proof prover="2"><result status="valid" time="0.019230" steps="6118"/></proof>
   </goal>
-  <goal name="numof_decreases&#39;vc.1" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.045313" steps="31291"/></proof>
+  <goal name="aux&#39;vc.1" expl="precondition">
+  <proof prover="2"><result status="valid" time="0.034784" steps="55346"/></proof>
   </goal>
-  <goal name="numof_decreases&#39;vc.2" expl="index in array bounds" proved="true">
-  <proof prover="2"><result status="valid" time="0.033883" steps="30490"/></proof>
+  <goal name="aux&#39;vc.2" expl="variant decrease">
+  <proof prover="2"><result status="valid" time="0.027698" steps="29661"/></proof>
   </goal>
-  <goal name="numof_decreases&#39;vc.3" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.020683" steps="2523"/></proof>
+  <goal name="aux&#39;vc.3" expl="precondition">
+  <proof prover="2"><result status="valid" time="0.047531" steps="57704"/></proof>
   </goal>
-  <goal name="numof_decreases&#39;vc.4" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.026368" steps="32346"/></proof>
+  <goal name="aux&#39;vc.4" expl="precondition">
+  <proof prover="2"><result status="valid" time="0.042657" steps="58154"/></proof>
   </goal>
-  <goal name="numof_decreases&#39;vc.5" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.018911" steps="2527"/></proof>
+  <goal name="aux&#39;vc.5" expl="precondition">
+  <proof prover="2"><result status="valid" time="0.018301" steps="4367"/></proof>
   </goal>
-  <goal name="numof_decreases&#39;vc.6" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.024460" steps="32394"/></proof>
+  <goal name="aux&#39;vc.6" expl="precondition">
+  <proof prover="0"><result status="valid" time="0.186859" steps="2362"/></proof>
   </goal>
-  <goal name="numof_decreases&#39;vc.7" expl="postcondition" proved="true">
-  <transf name="split_vc" proved="true" >
-   <goal name="numof_decreases&#39;vc.7.0" expl="postcondition" proved="true">
-   <proof prover="2"><result status="valid" time="0.022537" steps="34078"/></proof>
+  <goal name="aux&#39;vc.7" expl="postcondition">
+  <proof prover="2"><result status="valid" time="0.006757" steps="5282"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.8" expl="postcondition">
+  <proof prover="2"><result status="valid" time="0.023468" steps="5284"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.9" expl="postcondition">
+  <proof prover="2"><result status="valid" time="0.023045" steps="7706"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.10" expl="postcondition">
+  <proof prover="0" obsolete="true"><result status="timeout" time="1.000000" steps="7099"/></proof>
+  <proof prover="2" obsolete="true"><result status="timeout" time="1.054432" steps="2084414"/></proof>
+  <proof prover="3" obsolete="true"><result status="timeout" time="1.000000" steps="401483"/></proof>
+  <transf name="split_vc" >
+   <goal name="aux&#39;vc.10.0" expl="postcondition">
+   <proof prover="0" obsolete="true"><result status="valid" time="0.398034" steps="2775"/></proof>
+   <proof prover="2"><result status="valid" time="0.018963" steps="7465"/></proof>
    </goal>
-   <goal name="numof_decreases&#39;vc.7.1" expl="postcondition" proved="true">
-   <proof prover="0" timelimit="1"><result status="timeout" time="1.000000" steps="8156"/></proof>
-   <proof prover="2"><result status="timeout" time="1.000000" steps="2630847"/></proof>
-   <proof prover="3" timelimit="1"><result status="timeout" time="1.000000" steps="116920"/></proof>
-   <transf name="split_vc" proved="true" >
-    <goal name="numof_decreases&#39;vc.7.1.0" expl="postcondition" proved="true">
-    <proof prover="2"><result status="valid" time="0.032725" steps="49571"/></proof>
+   <goal name="aux&#39;vc.10.1" expl="postcondition">
+   <proof prover="2"><result status="valid" time="0.032363" steps="7457"/></proof>
+   </goal>
+   <goal name="aux&#39;vc.10.2" expl="postcondition">
+   <proof prover="2"><result status="valid" time="0.015695" steps="7449"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="aux&#39;vc.11" expl="exceptional postcondition">
+  <proof prover="2"><result status="valid" time="0.009680" steps="4369"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.12" expl="exceptional postcondition">
+  <proof prover="2"><result status="valid" time="0.025181" steps="58959"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.13" expl="variant decrease">
+  <proof prover="2"><result status="valid" time="0.024473" steps="29661"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.14" expl="precondition">
+  <proof prover="2"><result status="valid" time="0.035278" steps="57547"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.15" expl="precondition">
+  <proof prover="2"><result status="valid" time="0.029338" steps="57997"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.16" expl="precondition">
+  <proof prover="2"><result status="valid" time="0.010918" steps="4367"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.17" expl="precondition">
+  <proof prover="2"><result status="valid" time="0.058302" steps="134703"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.18" expl="postcondition">
+  <proof prover="2"><result status="valid" time="0.019783" steps="5282"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.19" expl="postcondition">
+  <proof prover="2"><result status="valid" time="0.031819" steps="5284"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.20" expl="postcondition">
+  <proof prover="2"><result status="valid" time="0.009032" steps="7706"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.21" expl="postcondition">
+  <proof prover="2"><result status="valid" time="0.011049" steps="7713"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.22" expl="exceptional postcondition">
+  <proof prover="2"><result status="valid" time="0.009551" steps="4369"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.23" expl="postcondition">
+  <proof prover="2"><result status="valid" time="0.027566" steps="4327"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.24" expl="postcondition">
+  <proof prover="2"><result status="valid" time="0.023477" steps="4329"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.25" expl="postcondition">
+  <proof prover="2"><result status="valid" time="0.099606" steps="189376"/></proof>
+  </goal>
+  <goal name="aux&#39;vc.26" expl="postcondition">
+  <proof prover="0" obsolete="true"><result status="timeout" time="1.000000" steps="9248"/></proof>
+  <proof prover="2" obsolete="true"><result status="timeout" time="1.000000" steps="2124557"/></proof>
+  <proof prover="3" obsolete="true"><result status="timeout" time="1.000000" steps="355007"/></proof>
+  <transf name="split_vc" >
+   <goal name="aux&#39;vc.26.0" expl="postcondition">
+   <proof prover="0"><result status="valid" time="0.336928" steps="2775"/></proof>
+   </goal>
+   <goal name="aux&#39;vc.26.1" expl="postcondition">
+   <proof prover="2"><result status="valid" time="0.028874" steps="72924"/></proof>
+   </goal>
+   <goal name="aux&#39;vc.26.2" expl="postcondition">
+   <proof prover="0" obsolete="true"><result status="timeout" time="1.000000" steps="10543"/></proof>
+   <proof prover="2" obsolete="true"><result status="timeout" time="1.000000" steps="2555069"/></proof>
+   <proof prover="3" obsolete="true"><result status="timeout" time="1.000000" steps="401342"/></proof>
+   <transf name="split_vc" >
+    <goal name="aux&#39;vc.26.2.0" expl="postcondition">
+    <proof prover="2"><result status="valid" time="0.040310" steps="160227"/></proof>
     </goal>
-    <goal name="numof_decreases&#39;vc.7.1.1" expl="postcondition" proved="true">
-    <proof prover="0" timelimit="1"><result status="valid" time="0.611029" steps="4780"/></proof>
+    <goal name="aux&#39;vc.26.2.1" expl="postcondition">
+    <proof prover="2"><result status="valid" time="0.020893" steps="34073"/></proof>
     </goal>
    </transf>
    </goal>
   </transf>
   </goal>
-  <goal name="numof_decreases&#39;vc.8" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.077266" steps="168303"/></proof>
-  </goal>
-  <goal name="numof_decreases&#39;vc.9" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.112766" steps="296060"/></proof>
-  </goal>
-  <goal name="numof_decreases&#39;vc.10" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.025940" steps="29588"/></proof>
-  </goal>
-  <goal name="numof_decreases&#39;vc.11" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.032552" steps="46242"/></proof>
-  </goal>
  </transf>
  </goal>
-</theory>
-<theory name="Sat" proved="true">
- <goal name="infix ==&#39;vc" expl="VC for infix ==" proved="true">
- <proof prover="0"><result status="valid" time="0.015557" steps="2"/></proof>
+ <goal name="partial_eval_cnf&#39;vc" expl="VC for partial_eval_cnf">
+ <proof prover="2" obsolete="true"><result status="valid" time="0.032526" steps="84881"/></proof>
  </goal>
- <goal name="cnf&#39;vc" expl="VC for cnf" proved="true">
- <proof prover="3"><result status="valid" time="0.052434" steps="9974"/></proof>
+ <goal name="backtrack&#39;vc" expl="VC for backtrack">
+ <proof prover="3" obsolete="true"><result status="valid" time="0.130121" steps="18343"/></proof>
  </goal>
- <goal name="extract_sat_valuation&#39;vc" expl="VC for extract_sat_valuation" proved="true">
- <proof prover="3"><result status="valid" time="0.251286" steps="34937"/></proof>
+ <goal name="set_value&#39;vc" expl="VC for set_value">
+ <proof prover="2" obsolete="true"><result status="valid" time="0.074763" steps="151373"/></proof>
  </goal>
- <goal name="partial_eval_clause&#39;vc" expl="VC for partial_eval_clause" proved="true">
- <proof prover="0"><result status="valid" time="0.782650" steps="6340"/></proof>
- </goal>
- <goal name="aux&#39;vc" expl="VC for aux" proved="true">
- <proof prover="0"><result status="valid" time="0.733406" steps="6999"/></proof>
- </goal>
- <goal name="partial_eval_cnf&#39;vc" expl="VC for partial_eval_cnf" proved="true">
- <proof prover="2" timelimit="5"><result status="valid" time="0.032526" steps="68717"/></proof>
- </goal>
- <goal name="backtrack&#39;vc" expl="VC for backtrack" proved="true">
- <proof prover="3"><result status="valid" time="0.130121" steps="18343"/></proof>
- </goal>
- <goal name="set_value&#39;vc" expl="VC for set_value" proved="true">
- <proof prover="2" timelimit="5"><result status="valid" time="0.074763" steps="151373"/></proof>
- </goal>
- <goal name="sat&#39;vc" expl="VC for sat" proved="true">
- <proof prover="3"><result status="valid" time="0.038651" steps="8347"/></proof>
+ <goal name="sat&#39;vc" expl="VC for sat">
+ <proof prover="2" obsolete="true"><result status="valid" time="0.017266" steps="3210"/></proof>
+ <proof prover="3" timelimit="5" obsolete="true"><result status="valid" time="0.038651" steps="8347"/></proof>
  </goal>
 </theory>
 <theory name="UnitSat">
  <goal name="infix ==&#39;vc" expl="VC for infix ==">
+ <proof prover="2"><result status="valid" time="0.024813" steps="24809"/></proof>
  </goal>
  <goal name="cnf&#39;vc" expl="VC for cnf">
+ <proof prover="2"><result status="valid" time="0.025791" steps="36635"/></proof>
  </goal>
  <goal name="extract_sat_valuation&#39;vc" expl="VC for extract_sat_valuation">
  </goal>
@@ -114,6 +177,69 @@
  <goal name="set_and_propagate&#39;vc" expl="VC for set_and_propagate">
  </goal>
  <goal name="sat&#39;vc" expl="VC for sat">
+ <proof prover="2"><result status="valid" time="0.022245" steps="2676"/></proof>
+ </goal>
+</theory>
+<theory name="NumOf">
+ <goal name="infix ==&#39;vc" expl="VC for infix ==">
+ <proof prover="3" timelimit="5"><result status="valid" time="0.032368" steps="4905"/></proof>
+ </goal>
+ <goal name="numof_decreases&#39;vc" expl="VC for numof_decreases">
+ <transf name="split_vc" >
+  <goal name="numof_decreases&#39;vc.0" expl="variant decrease">
+  <proof prover="2"><result status="valid" time="0.018604" steps="2375"/></proof>
+  </goal>
+  <goal name="numof_decreases&#39;vc.1" expl="precondition">
+  <proof prover="2"><result status="valid" time="0.045313" steps="31291"/></proof>
+  </goal>
+  <goal name="numof_decreases&#39;vc.2" expl="index in array bounds">
+  <proof prover="2"><result status="valid" time="0.033883" steps="30490"/></proof>
+  </goal>
+  <goal name="numof_decreases&#39;vc.3" expl="variant decrease">
+  <proof prover="2"><result status="valid" time="0.020683" steps="2523"/></proof>
+  </goal>
+  <goal name="numof_decreases&#39;vc.4" expl="precondition">
+  <proof prover="2"><result status="valid" time="0.026368" steps="32346"/></proof>
+  </goal>
+  <goal name="numof_decreases&#39;vc.5" expl="variant decrease">
+  <proof prover="2"><result status="valid" time="0.018911" steps="2527"/></proof>
+  </goal>
+  <goal name="numof_decreases&#39;vc.6" expl="precondition">
+  <proof prover="2"><result status="valid" time="0.024460" steps="32394"/></proof>
+  </goal>
+  <goal name="numof_decreases&#39;vc.7" expl="postcondition">
+  <transf name="split_vc" >
+   <goal name="numof_decreases&#39;vc.7.0" expl="postcondition">
+   <proof prover="2"><result status="valid" time="0.022537" steps="34078"/></proof>
+   </goal>
+   <goal name="numof_decreases&#39;vc.7.1" expl="postcondition">
+   <proof prover="0"><result status="timeout" time="1.000000" steps="8156"/></proof>
+   <proof prover="2"><result status="timeout" time="1.000000" steps="2630847"/></proof>
+   <proof prover="3"><result status="timeout" time="1.000000" steps="116920"/></proof>
+   <transf name="split_vc" >
+    <goal name="numof_decreases&#39;vc.7.1.0" expl="postcondition">
+    <proof prover="2"><result status="valid" time="0.032725" steps="49571"/></proof>
+    </goal>
+    <goal name="numof_decreases&#39;vc.7.1.1" expl="postcondition">
+    <proof prover="0"><result status="valid" time="0.611029" steps="4780"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="numof_decreases&#39;vc.8" expl="postcondition">
+  <proof prover="2"><result status="valid" time="0.077266" steps="168303"/></proof>
+  </goal>
+  <goal name="numof_decreases&#39;vc.9" expl="postcondition">
+  <proof prover="2"><result status="valid" time="0.112766" steps="296060"/></proof>
+  </goal>
+  <goal name="numof_decreases&#39;vc.10" expl="precondition">
+  <proof prover="2"><result status="valid" time="0.025940" steps="29588"/></proof>
+  </goal>
+  <goal name="numof_decreases&#39;vc.11" expl="postcondition">
+  <proof prover="2"><result status="valid" time="0.032552" steps="46242"/></proof>
+  </goal>
+ </transf>
  </goal>
 </theory>
 </file>
